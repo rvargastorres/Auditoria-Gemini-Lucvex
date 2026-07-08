@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoría de Eficiencia Operativa & IA - Consultoría Tecnológica</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js para las radiografías visuales -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10b981', // Emerald para representar dinero y crecimiento
+                        dark: '#0f172a',    // Slate oscuro para tono corporativo
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #10b981;
+            cursor: pointer;
+            transition: background .15s ease-in-out;
+        }
+        .custom-slider::-webkit-slider-thumb:hover {
+            background: #059669;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col justify-between text-slate-800">
+
+    <!-- Header Corporativo -->
+    <header class="bg-dark text-white py-4 px-6 shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-primary p-2 rounded-lg text-dark font-black text-xl">Σ</div>
+                <div>
+                    <h1 class="font-bold text-lg leading-none">CEREBRO DIGITAL</h1>
+                    <span class="text-xs text-slate-400">Consultoría & Auditoría de Eficiencia Operativa</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="bg-primary/20 text-primary text-xs px-3 py-1 rounded-full font-semibold border border-primary/30">Motor de Diagnóstico V2.6</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <!-- Pestañas de Navegación -->
+        <div class="flex border-b border-slate-200 mb-6 bg-white p-1 rounded-t-xl">
+            <button onclick="switchTab('audit')" id="tab-audit" class="flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all bg-primary text-dark shadow">
+                1. Datos de la Auditoría
+            </button>
+            <button onclick="switchTab('radiography')" id="tab-radiography" class="flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all text-slate-500 hover:text-dark">
+                2. Radiografía & Diagnóstico
+            </button>
+            <button onclick="switchTab('proposal')" id="tab-proposal" class="flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all text-slate-500 hover:text-dark">
+                3. Recomendaciones & ROI
+            </button>
+        </div>
+
+        <!-- SECCIÓN 1: FORMULARIO DE AUDITORÍA -->
+        <section id="sec-audit" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Formulario principal -->
+            <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col gap-6">
+                <div>
+                    <h2 class="text-xl font-bold text-dark mb-1">Cuestionario de Diagnóstico de Procesos</h2>
+                    <p class="text-sm text-slate-500">Completa las métricas reales del negocio para calcular las ineficiencias.</p>
+                </div>
+
+                <!-- Datos de Control -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Nombre del Negocio</label>
+                        <input id="biz-name" type="text" placeholder="Ej. Fisioterapia Segovia" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Sector Industrial</label>
+                        <select id="biz-sector" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white">
+                            <option value="servicios">Servicios del Hogar (Fontanería/Calefacción/Electricidad)</option>
+                            <option value="salud">Salud & Bienestar (Clínica Dental/Fisioterapia/Estética)</option>
+                            <option value="reformas">Reformas & Construcción</option>
+                            <option value="otros">Otras Micro-Pymes comerciales</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr class="border-slate-100">
+
+                <!-- Parámetros Financieros Reales -->
+                <div>
+                    <h3 class="font-bold text-dark text-sm mb-4 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-primary"></span> Parámetros Financieros & Operativos
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <!-- Coste de Mano de Obra por Hora -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <label class="text-xs font-semibold text-slate-600">Coste de tu hora de trabajo (€/h)</label>
+                                <span id="val-hourly-rate" class="text-sm font-bold text-primary">45 €</span>
+                            </div>
+                            <input id="hourly-rate" type="range" min="15" max="150" value="45" class="w-full h-1 bg-slate-100 rounded-lg appearance-none cursor-pointer custom-slider" oninput="updateVal('hourly-rate', 'val-hourly-rate', ' €')">
+                        </div>
+
+                        <!-- Ticket Medio por Servicio -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <label class="text-xs font-semibold text-slate-600">Valor de ticket medio del servicio (€)</label>
+                                <span id="val-ticket" class="text-sm font-bold text-primary">70 €</span>
+                            </div>
+                            <input id="ticket" type="range" min="20" max="1500" step="5" value="70" class="w-full h-1 bg-slate-100 rounded-lg appearance-none cursor-pointer custom-slider" oninput="updateVal('ticket', 'val-ticket', ' €')">
+                        </div>
+
+                        <!-- Horas Administrativas Semanales -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <label class="text-xs font-semibold text-slate-600">Horas semanales en administración/papeleo</label>
+                                <span id="val-admin-hours" class="text-sm font-bold text-primary">10 h</span>
+                            </div>
+                            <input id="admin-hours" type="range" min="0" max="40" value="10" class="w-full h-1 bg-slate-100 rounded-lg appearance-none cursor-pointer custom-slider" oninput="updateVal('admin-hours', 'val-admin-hours', ' h')">
+                        </div>
+
+                        <!-- Llamadas y WhatsApps Perdidos por Día -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <label class="text-xs font-semibold text-slate-600">Llamadas/Mensajes no respondidos al día</label>
+                                <span id="val-missed-calls" class="text-sm font-bold text-primary">4</span>
+                            </div>
+                            <input id="missed-calls" type="range" min="0" max="25" value="4" class="w-full h-1 bg-slate-100 rounded-lg appearance-none cursor-pointer custom-slider" oninput="updateVal('missed-calls', 'val-missed-calls', '')">
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="border-slate-100">
+
+                <!-- Evaluación de Sistemas y Métodos (Clasificador de Perfil) -->
+                <div>
+                    <h3 class="font-bold text-dark text-sm mb-4 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-primary"></span> Métodos de Trabajo Actuales (Clasificador)
+                    </h3>
+                    <div class="flex flex-col gap-4">
+                        <!-- Criterio A: Citas y Agenda -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                            <span class="block text-xs font-bold text-slate-600 mb-2">1. ¿Cómo gestionas y coordinas tu agenda diaria?</span>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
+                                    <input type="radio" name="sys-agenda" value="1" checked class="text-primary focus:ring-primary">
+                                    <span>Libreta de papel / Libreta de apuntes</span>
+                                </label>
+                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
+                                    <input type="radio" name="sys-agenda" value="2" class="text-primary focus:ring-primary">
+                                    <span>Calendario del móvil (Manual)</span>
+                                </label>
+                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
+                                    <input type="radio" name="sys-agenda" value="3" class="text-primary focus:ring-primary">
+                                    <span>Software de gestión o CRM automático</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Criterio B: Facturación y Albaranes -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                            <span class="block text-xs font-bold text-slate-600 mb-2">2. ¿Cómo se emiten y envían las facturas o presupuestos?</span>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
+                                    <input type="radio" name="sys-fact" value="1" checked class="text-primary focus:ring-primary">
+                                    <span>Talonario físico de papel / Word</span>
+                                </label>
+                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
+                                    <input type="radio" name="sys-fact" value="2" class="text-primary focus:ring-primary">
+                                    <span>App de facturas (Copio datos a mano)</span>
+                                </label>
+                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
+                                    <input type="radio" name="sys-fact" value="3" class="text-primary focus:ring-primary">
+                                    <span>ERP conectado (Se emite automático)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Criterio C: Seguimiento de Clientes -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                            <span class="block text-xs font-bold text-slate-600 mb-2">3. ¿Haces seguimiento a los presupuestos enviados?</span>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
+                                    <input type="radio" name="sys-follow" value="1" checked class="text-primary focus:ring-primary">
+                                    <span>No hago seguimiento por falta de tiempo</span>
+                                </label>
+                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
+                                    <input type="radio" name="sys-follow" value="2" class="text-primary focus:ring-primary">
+                                    <span>Reviso el chat de WhatsApp manualmente</span>
+                                </label>
+                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
+                                    <input type="radio" name="sys-follow" value="3" class="text-primary focus:ring-primary">
+                                    <span>CRM automatizado envía avisos</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="calculateAudit()" class="w-full bg-primary hover:bg-emerald-600 text-dark font-bold py-4 rounded-xl shadow-lg transition-all text-center uppercase tracking-wider">
+                    Procesar Radiografía del Negocio
+                </button>
+            </div>
+
+            <!-- Panel de Entrada de Auditoría Lateral (Modo de Captación) -->
+            <div class="bg-dark text-white rounded-2xl p-6 shadow-xl flex flex-col justify-between border border-slate-800">
+                <div class="flex flex-col gap-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20 self-start">Estrategia Comercial</span>
+                    <h3 class="text-lg font-bold">Cómo vender este Diagnóstico</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Utiliza esta pestaña como tu soporte visual mientras charlas con el empresario en la furgoneta o en su oficina. Introduce los parámetros que te va confesando.
+                    </p>
+                    
+                    <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-col gap-2">
+                        <span class="text-xs font-bold text-slate-300">Estructura de Tarifas del Consultor:</span>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-400">Auditoría Exprés (Digital)</span>
+                            <span class="text-primary font-bold">0 € (Gancho)</span>
+                        </div>
+                        <div class="flex justify-between text-xs border-t border-slate-700 pt-2 mt-1">
+                            <span class="text-slate-400">Auditoría Avanzada (Presencial)</span>
+                            <span class="font-bold">350 € - 600 €</span>
+                        </div>
+                        <p class="text-[10px] text-slate-500 italic mt-1">
+                            Tip: Ofrece descontar el importe de la auditoría premium si el cliente contrata la instalación del sistema de IA contigo.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-slate-800 flex flex-col gap-2">
+                    <span class="text-xs text-slate-400">¿Estás listo? Da click en el botón del cuestionario para visualizar la radiografía en tiempo real.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: RADIOGRAFÍA & DIAGNÓSTICO -->
+        <section id="sec-radiography" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Panel Izquierdo: Resumen Financiero y Diagnóstico Oculto -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col gap-6">
+                <div>
+                    <span class="text-xs font-bold text-primary uppercase">Diagnóstico Financiero</span>
+                    <h2 class="text-xl font-bold text-dark" id="rad-biz-name">Clínica Dental Pérez</h2>
+                    <p class="text-xs text-slate-400">Análisis detallado de pérdidas y fugas anualizadas.</p>
+                </div>
+
+                <!-- Perfil Detectado Badge -->
+                <div class="p-4 rounded-xl flex flex-col gap-1 text-center" id="perfil-badge-container">
+                    <span class="text-xs font-semibold uppercase text-slate-500">Perfil de Madurez Digital:</span>
+                    <span id="txt-perfil" class="text-lg font-black tracking-wide">MEDIO - DIGITALIZACIÓN FRAGMENTADA</span>
+                </div>
+
+                <!-- Datos de Fuga Clave -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-rose-50 border border-rose-100 p-4 rounded-xl text-center">
+                        <span class="block text-xs text-slate-500 font-medium">Fuga Mensual</span>
+                        <span id="txt-fuga-mensual" class="text-2xl font-black text-rose-600">0.000 €</span>
+                    </div>
+                    <div class="bg-rose-50 border border-rose-100 p-4 rounded-xl text-center">
+                        <span class="block text-xs text-slate-500 font-medium">Fuga Anual</span>
+                        <span id="txt-fuga-anual" class="text-2xl font-black text-rose-600">00.000 €</span>
+                    </div>
+                </div>
+
+                <!-- Desglose de Fugas Ocultas -->
+                <div class="flex flex-col gap-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Origen de las pérdidas</h3>
+                    <!-- Fuga llamadas -->
+                    <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg border border-slate-100">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                            <span class="text-xs font-bold">Llamadas No Rescatadas</span>
+                        </div>
+                        <span id="val-fuga-llamadas" class="text-xs font-bold text-slate-700">000 €/mes</span>
+                    </div>
+                    <!-- Fuga admin -->
+                    <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg border border-slate-100">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                            <span class="text-xs font-bold">Horas de Oficina Perdidas</span>
+                        </div>
+                        <span id="val-fuga-admin" class="text-xs font-bold text-slate-700">000 €/mes</span>
+                    </div>
+                    <!-- Fuga seguimiento -->
+                    <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg border border-slate-100">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
+                            <span class="text-xs font-bold">Presupuestos Olvidados</span>
+                        </div>
+                        <span id="val-fuga-follow" class="text-xs font-bold text-slate-700">000 €/mes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel Central: Gráfica de Radiografía Visual -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between gap-6 lg:col-span-2">
+                <div>
+                    <h3 class="font-bold text-dark text-lg">Distribución de Pérdidas Ocultas</h3>
+                    <p class="text-xs text-slate-400">Proporción del dinero que se desvanece de forma invisible cada mes en el negocio.</p>
+                </div>
+
+                <div class="relative flex justify-center items-center h-64">
+                    <canvas id="fugasChart"></canvas>
+                </div>
+
+                <div class="bg-primary/10 border border-primary/20 p-4 rounded-xl text-center">
+                    <p class="text-xs text-slate-700 font-medium">
+                        "Implementando un asistente inteligente de respuesta rápida y optimizando los flujos de oficina con IA, se puede recuperar de manera directa hasta el <strong class="text-primary-dark">85% del capital fugado</strong>."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: RECOMENDACIONES & ROI -->
+        <section id="sec-proposal" class="hidden flex flex-col gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Tarjeta de Diagnóstico de Recomendaciones -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between gap-6">
+                    <div>
+                        <span class="text-xs font-bold text-primary uppercase">Ecosistema Propuesto</span>
+                        <h3 class="text-xl font-bold text-dark">Propuesta de Optimización</h3>
+                        <p class="text-xs text-slate-400 mt-1">Este es el kit de herramientas recomendado específicamente para corregir tus procesos.</p>
+                    </div>
+
+                    <!-- Lista de Herramientas -->
+                    <div id="container-tools-list" class="flex flex-col gap-3">
+                        <!-- Se rellenará dinámicamente -->
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs">
+                        <span class="block font-bold text-dark mb-1">Mantenimiento de Soporte Local:</span>
+                        <p class="text-slate-500">Incluye soporte presencial/remoto de tu consultor y ajustes continuos a la IA para adaptarse a tu negocio diario.</p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta de Impacto de Ahorro y Plazos -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between gap-6 lg:col-span-2">
+                    <div>
+                        <span class="text-xs font-bold text-primary uppercase">Retorno de Inversión (ROI)</span>
+                        <h3 class="text-xl font-bold text-dark">Impacto Económico Estimado</h3>
+                        <p class="text-xs text-slate-400">Cuánto vas a ahorrar, cuánto vas a invertir y en cuánto tiempo se amortiza.</p>
+                    </div>
+
+                    <!-- Tabla de ROI -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 text-slate-400 uppercase tracking-wider">
+                                    <th class="py-2">Concepto</th>
+                                    <th class="py-2">Métrica Actual</th>
+                                    <th class="py-2 text-primary font-bold">Estado Optimizado</th>
+                                    <th class="py-2 text-dark">Ahorro Mensual</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr>
+                                    <td class="py-3 font-semibold">Tiempo en Oficina</td>
+                                    <td id="table-admin-current" class="py-3 text-slate-500">00 h/mes</td>
+                                    <td id="table-admin-optim" class="py-3 text-primary font-bold font-mono">00 h/mes</td>
+                                    <td id="table-admin-save" class="py-3 font-bold font-mono text-dark">000 €/mes</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 font-semibold">Captación / Clientes Perdidos</td>
+                                    <td id="table-calls-current" class="py-3 text-slate-500">00 llamadas</td>
+                                    <td id="table-calls-optim" class="py-3 text-primary font-bold font-mono">0 llamadas</td>
+                                    <td id="table-calls-save" class="py-3 font-bold font-mono text-dark">000 €/mes</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 font-semibold">Presupuestos sin seguimiento</td>
+                                    <td id="table-presup-current" class="py-3 text-slate-500">Olvidado</td>
+                                    <td id="table-presup-optim" class="py-3 text-primary font-bold font-mono">100% Automatizado</td>
+                                    <td id="table-presup-save" class="py-3 font-bold font-mono text-dark">000 €/mes</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Resumen del Presupuesto de Implantación -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-slate-100 pt-6">
+                        <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl text-center">
+                            <span class="block text-[10px] text-slate-400 font-bold uppercase">Inversión Setup</span>
+                            <span id="lbl-setup" class="text-lg font-extrabold text-dark">0.000 €</span>
+                        </div>
+                        <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl text-center">
+                            <span class="block text-[10px] text-slate-400 font-bold uppercase">Mantenimiento Mensual</span>
+                            <span id="lbl-maint" class="text-lg font-extrabold text-dark">000 €/mes</span>
+                        </div>
+                        <div class="p-3 bg-emerald-50 border border-emerald-100 rounded-xl text-center">
+                            <span class="block text-[10px] text-slate-400 font-bold uppercase">Amortización Estimada</span>
+                            <span id="lbl-amort" class="text-lg font-extrabold text-primary">00 días</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulador de WhatsApp en tiempo real -->
+            <div class="bg-dark text-white rounded-2xl p-6 shadow-xl border border-slate-800 flex flex-col gap-4">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                        <h4 class="font-bold text-sm">Simulador de Asistente de IA (WhatsApp)</h4>
+                    </div>
+                    <span class="text-xs text-slate-400">Demostración en vivo</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Escribe una consulta rápida a continuación simulando ser un cliente potencial. Nuestro sistema de simulación procesará la respuesta imitando el comportamiento de un Agente conversacional personalizado con el tono de tu negocio.
+                        </p>
+                        <div class="mt-4 flex gap-2">
+                            <input id="sim-input" type="text" placeholder="Ej. Quiero cita para reparar caldera..." class="flex-grow bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-primary">
+                            <button onclick="sendSimulatedMessage()" class="bg-primary hover:bg-emerald-600 text-dark px-4 py-2 rounded-xl text-xs font-bold transition-all">Enviar</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 h-36 overflow-y-auto flex flex-col gap-2 font-mono text-xs text-slate-300" id="chat-box">
+                        <div class="text-slate-500 italic">[El chat está vacío. Envía un mensaje...]</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Corporativo -->
+    <footer class="bg-slate-900 text-slate-400 text-center py-4 text-xs border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <p>© 2026 CEREBRO DIGITAL - Consultoría de Optimización de Procesos. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript para el Motor de Diagnóstico -->
+    <script>
+        let currentTab = 'audit';
+        let fugasChart = null;
+        let diagnosticData = null;
+
+        // Cambiar entre pestañas
+        function switchTab(tabId) {
+            document.getElementById('sec-audit').classList.add('hidden');
+            document.getElementById('sec-radiography').classList.add('hidden');
+            document.getElementById('sec-proposal').classList.add('hidden');
+
+            document.getElementById('tab-audit').className = 'flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all text-slate-500 hover:text-dark';
+            document.getElementById('tab-radiography').className = 'flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all text-slate-500 hover:text-dark';
+            document.getElementById('tab-proposal').className = 'flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all text-slate-500 hover:text-dark';
+
+            if (tabId === 'audit') {
+                document.getElementById('sec-audit').classList.remove('hidden');
+                document.getElementById('tab-audit').className = 'flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all bg-primary text-dark shadow';
+            } else if (tabId === 'radiography') {
+                if (!diagnosticData) {
+                    calculateAudit();
+                }
+                document.getElementById('sec-radiography').classList.remove('hidden');
+                document.getElementById('tab-radiography').className = 'flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all bg-primary text-dark shadow';
+                renderChart();
+            } else if (tabId === 'proposal') {
+                if (!diagnosticData) {
+                    calculateAudit();
+                }
+                document.getElementById('sec-proposal').classList.remove('hidden');
+                document.getElementById('tab-proposal').className = 'flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all bg-primary text-dark shadow';
+            }
+            currentTab = tabId;
+        }
+
+        // Actualizar el valor visual de los sliders
+        function updateVal(sliderId, labelId, suffix) {
+            let val = document.getElementById(sliderId).value;
+            document.getElementById(labelId).innerText = val + suffix;
+        }
+
+        // Motor Algorítmico de Cálculos
+        function calculateAudit() {
+            // Extracción de datos del cliente
+            const name = document.getElementById('biz-name').value || 'Tu Empresa';
+            const sector = document.getElementById('biz-sector').value;
+            const mo = parseFloat(document.getElementById('hourly-rate').value);
+            const tm = parseFloat(document.getElementById('ticket').value);
+            const adminHours = parseFloat(document.getElementById('admin-hours').value);
+            const missedCalls = parseFloat(document.getElementById('missed-calls').value);
+
+            // Criterios de Selección de Radio Buttons
+            const sysAgenda = parseInt(document.querySelector('input[name="sys-agenda"]:checked').value);
+            const sysFact = parseInt(document.querySelector('input[name="sys-fact"]:checked').value);
+            const sysFollow = parseInt(document.querySelector('input[name="sys-follow"]:checked').value);
+
+            // Puntuación de madurez digital (Sobre 100)
+            const sumScore = (sysAgenda * 10) + (sysFact * 10) + (sysFollow * 10);
+            const scorePercent = Math.min(Math.round((sumScore / 30) * 100), 100);
+
+            // Clasificación de Perfil
+            let perfil = '';
+            let bgClass = '';
+            let textClass = '';
+            let setupCost = 0;
+            let maintCost = 0;
+            let toolsList = [];
+
+            if (scorePercent < 45) {
+                perfil = 'BAJO - GESTIÓN ANALÓGICA ("La Libreta")';
+                bgClass = 'bg-rose-500/10 border-rose-500/20 border text-rose-700';
+                setupCost = 1200;
+                maintCost = 90;
+                toolsList = [
+                    { name: 'Google Workspace Starter (Calendar/Drive)', cost: '5.75€ / mes', duration: 'Seguridad de agenda' },
+                    { name: 'WhatsApp Business API con Proveedor Local', cost: '15€ - 30€ / mes', duration: 'Canal de entrada estable' },
+                    { name: 'Asistente IA Base para WhatsApp de Clientes', cost: '15€ / mes en APIs', duration: 'Atención automática instantánea' }
+                ];
+            } else if (scorePercent >= 45 && scorePercent < 75) {
+                perfil = 'MEDIO - DIGITALIZACIÓN FRAGMENTADA';
+                bgClass = 'bg-amber-500/10 border-amber-500/20 border text-amber-700';
+                setupCost = 2200;
+                maintCost = 150;
+                toolsList = [
+                    { name: 'Software de Gestión SAT / Clínicas Integrado', cost: '40€ - 75€ / mes', duration: 'Centralización de fichas' },
+                    { name: 'Integrador n8n (Instalación Servidor VPS)', cost: '10€ / mes en Servidor', duration: 'Eliminación del copiar y pegar' },
+                    { name: 'Notificaciones SMS/WhatsApp automáticas', cost: 'Consumo por uso', duration: 'Envío de facturas automático' }
+                ];
+            } else {
+                perfil = 'ALTO - AVANZADO SIN INTELIGENCIA ARTIFICIAL';
+                bgClass = 'bg-emerald-500/10 border-emerald-500/20 border text-emerald-700';
+                setupCost = 4500;
+                maintCost = 250;
+                toolsList = [
+                    { name: 'GoHighLevel CRM (Estructura de Ventas)', cost: '97€ / mes', duration: 'Pipeline y seguimiento automático' },
+                    { name: 'Agente de Voz Telefónico Avanzado (Vapi AI)', cost: '0.12€ / min de llamada', duration: 'Respuesta 24/7 sin saturar' },
+                    { name: 'Modelos Multi-Agente en n8n', cost: 'Servidor Propio', duration: 'Toma de decisiones compleja' }
+                ];
+            }
+
+            // Fórmulas Financieras
+            // 1. Fuga llamadas: 35% de las llamadas se vuelven servicios
+            const fugaLlamadas = Math.round((missedCalls * 0.35) * tm * 20); 
+            // 2. Fuga admin: Horas en oficina calculadas a precio hora
+            const fugaAdmin = Math.round((adminHours * 4.3) * mo);
+            // 3. Fuga seguimiento: 20% de las citas estimadas no cerradas
+            const presupuestosMes = Math.round((missedCalls * 0.5) * 20); 
+            const fugaFollow = Math.round((presupuestosMes * 0.20) * 120); 
+
+            const fugaMensual = fugaLlamadas + fugaAdmin + fugaFollow;
+            const fugaAnual = fugaMensual * 12;
+
+            // Retorno de Inversión (ROI)
+            const tiempoAhorradoMes = Math.round(adminHours * 4.3 * 0.85); // 85% de ahorro en admin
+            const dineroAhorradoMes = Math.round((fugaLlamadas * 0.85) + (fugaAdmin * 0.85) + (fugaFollow * 0.5));
+            const amortizacionDias = Math.round((setupCost / dineroAhorradoMes) * 30);
+
+            // Almacenar datos en estado global
+            diagnosticData = {
+                name, sector, perfil, bgClass, textClass,
+                fugaLlamadas, fugaAdmin, fugaFollow, fugaMensual, fugaAnual,
+                setupCost, maintCost, toolsList,
+                tiempoAhorradoMes, dineroAhorradoMes, amortizacionDias,
+                adminHours, missedCalls
+            };
+
+            // Renderizar la visualización en la interfaz
+            document.getElementById('rad-biz-name').innerText = name;
+            
+            const badgeContainer = document.getElementById('perfil-badge-container');
+            badgeContainer.className = `p-4 rounded-xl flex flex-col gap-1 text-center ${bgClass}`;
+            document.getElementById('txt-perfil').innerText = perfil;
+
+            document.getElementById('txt-fuga-mensual').innerText = fugaMensual.toLocaleString() + ' €';
+            document.getElementById('txt-fuga-anual').innerText = fugaAnual.toLocaleString() + ' €';
+
+            document.getElementById('val-fuga-llamadas').innerText = fugaLlamadas.toLocaleString() + ' €/mes';
+            document.getElementById('val-fuga-admin').innerText = fugaAdmin.toLocaleString() + ' €/mes';
+            document.getElementById('val-fuga-follow').innerText = fugaFollow.toLocaleString() + ' €/mes';
+
+            // Actualizar Tabla ROI en Pestaña 3
+            document.getElementById('table-admin-current').innerText = Math.round(adminHours * 4.3) + ' h/mes';
+            document.getElementById('table-admin-optim').innerText = Math.round(adminHours * 4.3 * 0.15) + ' h/mes';
+            document.getElementById('table-admin-save').innerText = Math.round(fugaAdmin * 0.85) + ' €/mes';
+
+            document.getElementById('table-calls-current').innerText = missedCalls + ' al día';
+            document.getElementById('table-calls-optim').innerText = '0 (Filtrado por IA)';
+            document.getElementById('table-calls-save').innerText = Math.round(fugaLlamadas * 0.85) + ' €/mes';
+
+            document.getElementById('table-presup-current').innerText = 'Sin Seguimiento';
+            document.getElementById('table-presup-optim').innerText = '100% Automatizado';
+            document.getElementById('table-presup-save').innerText = Math.round(fugaFollow * 0.5) + ' €/mes';
+
+            // Actualizar Presupuestos y Plazos
+            document.getElementById('lbl-setup').innerText = setupCost.toLocaleString() + ' €';
+            document.getElementById('lbl-maint').innerText = maintCost + ' €/mes';
+            document.getElementById('lbl-amort').innerText = amortizacionDias + ' días';
+
+            // Rellenar lista de herramientas propuestas
+            const listContainer = document.getElementById('container-tools-list');
+            listContainer.innerHTML = '';
+            toolsList.forEach(tool => {
+                listContainer.innerHTML += `
+                    <div class="flex items-start gap-3 p-3 bg-slate-50 border border-slate-100 rounded-xl">
+                        <div class="bg-primary text-dark font-black text-xs p-1 px-2 rounded-lg mt-0.5">✓</div>
+                        <div>
+                            <span class="block text-xs font-bold text-dark">${tool.name}</span>
+                            <div class="flex gap-2 text-[10px] text-slate-500 mt-1">
+                                <span class="bg-slate-200 px-1.5 py-0.5 rounded font-mono">Coste: ${tool.cost}</span>
+                                <span class="bg-slate-200 px-1.5 py-0.5 rounded">Impacto: ${tool.duration}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Forzar el cambio de pestaña a la de diagnóstico si estamos procesando desde la primera
+            if (currentTab === 'audit') {
+                switchTab('radiography');
+            }
+        }
+
+        // Renderizar gráfica en canvas con Chart.js
+        function renderChart() {
+            if (!diagnosticData) return;
+
+            const ctx = document.getElementById('fugasChart').getContext('2d');
+            
+            if (fugasChart) {
+                fugasChart.destroy();
+            }
+
+            fugasChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Llamadas no rescatadas', 'Tiempo de Oficina perdido', 'Seguimiento de presupuestos'],
+                    datasets: [{
+                        data: [diagnosticData.fugaLlamadas, diagnosticData.fugaAdmin, diagnosticData.fugaFollow],
+                        backgroundColor: ['#ef4444', '#f59e0b', '#6366f1'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 11,
+                                    family: 'system-ui'
+                                },
+                                boxWidth: 12
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Simulación de interacción de Inteligencia Artificial (WhatsApp)
+        function sendSimulatedMessage() {
+            const input = document.getElementById('sim-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const chatBox = document.getElementById('chat-box');
+            
+            // Vaciar texto inicial si es el primer mensaje
+            if (chatBox.innerHTML.includes('[El chat está vacío.')) {
+                chatBox.innerHTML = '';
+            }
+
+            // Mensaje del usuario simulado
+            chatBox.innerHTML += `<div class="text-slate-400"><strong class="text-slate-200">Cliente:</strong> ${message}</div>`;
+            input.value = '';
+
+            // Hacer scroll hacia abajo
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Simulación de la respuesta de la IA personalizada con la regla de personalización aplicada
+            setTimeout(() => {
+                let response = "";
+                if (message.toLowerCase().includes('cita') || message.toLowerCase().includes('caldera')) {
+                    response = "Hola, claro que sí. Dispongo de un hueco para la revisión de tu equipo de calefacción mañana a las 11:00 de la mañana o el jueves a las 16:00. ¿Cuál te viene mejor?";
+                } else {
+                    response = "Hola, comprendo tu consulta sobre el estado del servicio. Un técnico especializado de nuestro equipo lo revisará a la brevedad.";
+                }
+
+                // Aplicar de manera estricta la personalización solicitada en el perfil del usuario: 
+                // Añadir "por favor y gracias" al final de los mensajes simulados de WhatsApp
+                response += " Por favor y gracias.";
+
+                chatBox.innerHTML += `<div class="text-primary"><strong class="text-emerald-400">Asistente IA:</strong> ${response}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
