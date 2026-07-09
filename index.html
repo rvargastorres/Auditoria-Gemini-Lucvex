@@ -1,703 +1,800 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-slate-50">
+<html lang="es" class="h-full bg-[#0b0f19] text-slate-100 antialiased">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auditoría de Eficiencia Operativa & IA - Consultoría Tecnológica</title>
+    <title>LUCVEX Academy - Test de Aptitud Profesional</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js para las radiografías visuales -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
                     colors: {
-                        primary: '#10b981', // Emerald para representar dinero y crecimiento
-                        dark: '#0f172a',    // Slate oscuro para tono corporativo
+                        brand: {
+                            blue: '#2563eb',     // Azul corporativo LUCVEX
+                            blueDark: '#1d4ed8', 
+                            emerald: '#10b981',  // Verde de éxito y métricas
+                            indigo: '#6366f1',   // Acento de motivación
+                            darkBg: '#0b0f19',   // Fondo profundo premium
+                            cardBg: '#0f172a',   // Color tarjeta slate
+                        }
                     }
                 }
             }
         }
     </script>
     <style>
-        .custom-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #10b981;
-            cursor: pointer;
-            transition: background .15s ease-in-out;
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
         }
-        .custom-slider::-webkit-slider-thumb:hover {
-            background: #059669;
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
         }
     </style>
 </head>
-<body class="h-full flex flex-col justify-between text-slate-800">
+<body class="h-full font-sans flex flex-col justify-between overflow-x-hidden custom-scrollbar">
 
-    <!-- Header Corporativo -->
-    <header class="bg-dark text-white py-4 px-6 shadow-md">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3">
-                <div class="bg-primary p-2 rounded-lg text-dark font-black text-xl">Σ</div>
-                <div>
-                    <h1 class="font-bold text-lg leading-none">CEREBRO DIGITAL</h1>
-                    <span class="text-xs text-slate-400">Consultoría & Auditoría de Eficiencia Operativa</span>
-                </div>
+    <!-- CABECERA PREMIUM MINIMALISTA -->
+    <header class="border-b border-slate-800/80 bg-[#0b0f19]/90 backdrop-blur-md sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-2.5">
+                <span class="text-xl font-black tracking-tight text-white">LUCVEX</span>
+                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-brand-blue/10 text-brand-blue border border-brand-blue/20 tracking-wider uppercase">ACADEMY</span>
             </div>
-            <div class="flex items-center gap-2">
-                <span class="bg-primary/20 text-primary text-xs px-3 py-1 rounded-full font-semibold border border-primary/30">Motor de Diagnóstico V2.6</span>
+            <div class="text-xs text-slate-400 font-medium bg-slate-900/60 px-3.5 py-1.5 rounded-full border border-slate-800 flex items-center gap-2">
+                <span class="h-2 w-2 rounded-full bg-brand-emerald animate-pulse"></span>
+                Certificación Profesional Activa
             </div>
         </div>
     </header>
 
-    <!-- Main Content Area -->
-    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
-        
-        <!-- Pestañas de Navegación -->
-        <div class="flex border-b border-slate-200 mb-6 bg-white p-1 rounded-t-xl">
-            <button onclick="switchTab('audit')" id="tab-audit" class="flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all bg-primary text-dark shadow">
-                1. Datos de la Auditoría
-            </button>
-            <button onclick="switchTab('radiography')" id="tab-radiography" class="flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all text-slate-500 hover:text-dark">
-                2. Radiografía & Diagnóstico
-            </button>
-            <button onclick="switchTab('proposal')" id="tab-proposal" class="flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all text-slate-500 hover:text-dark">
-                3. Recomendaciones & ROI
-            </button>
-        </div>
+    <!-- CONTENEDOR DE ESTADOS DEL EMBUDO -->
+    <main class="flex-grow flex items-center justify-center px-4 py-8 md:py-16 max-w-5xl mx-auto w-full">
 
-        <!-- SECCIÓN 1: FORMULARIO DE AUDITORÍA -->
-        <section id="sec-audit" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Formulario principal -->
-            <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col gap-6">
-                <div>
-                    <h2 class="text-xl font-bold text-dark mb-1">Cuestionario de Diagnóstico de Procesos</h2>
-                    <p class="text-sm text-slate-500">Completa las métricas reales del negocio para calcular las ineficiencias.</p>
-                </div>
+        <!-- ================= ESTADO 1: LANDING DE ENTRADA ================= -->
+        <section id="step-landing" class="w-full text-center space-y-8 max-w-3xl py-6 animate-fade-in">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-xs font-semibold text-brand-blue uppercase tracking-wider">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                Evaluación de Aptitud Analítica
+            </div>
+            
+            <div class="space-y-4">
+                <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+                    Domina el arte de auditar y optimizar <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-emerald-400">procesos con IA</span>.
+                </h1>
+                <p class="text-base md:text-lg text-slate-400 leading-relaxed font-light max-w-2xl mx-auto">
+                    Las empresas se hunden en tareas administrativas manuales y repetitivas. Descubre si tienes el perfil lógico, cognitivo y motivacional para convertirte en un <strong class="text-white font-semibold">Auditor de Procesos Certificado</strong> y cobrar por resolver este caos.
+                </p>
+            </div>
 
-                <!-- Datos de Control -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Nombre del Negocio</label>
-                        <input id="biz-name" type="text" placeholder="Ej. Fisioterapia Segovia" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/50">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Sector Industrial</label>
-                        <select id="biz-sector" class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white">
-                            <option value="servicios">Servicios del Hogar (Fontanería/Calefacción/Electricidad)</option>
-                            <option value="salud">Salud & Bienestar (Clínica Dental/Fisioterapia/Estética)</option>
-                            <option value="reformas">Reformas & Construcción</option>
-                            <option value="otros">Otras Micro-Pymes comerciales</option>
-                        </select>
-                    </div>
-                </div>
-
-                <hr class="border-slate-100">
-
-                <!-- Parámetros Financieros Reales -->
-                <div>
-                    <h3 class="font-bold text-dark text-sm mb-4 flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-primary"></span> Parámetros Financieros & Operativos
-                    </h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <!-- Coste de Mano de Obra por Hora -->
-                        <div>
-                            <div class="flex justify-between mb-1">
-                                <label class="text-xs font-semibold text-slate-600">Coste de tu hora de trabajo (€/h)</label>
-                                <span id="val-hourly-rate" class="text-sm font-bold text-primary">45 €</span>
-                            </div>
-                            <input id="hourly-rate" type="range" min="15" max="150" value="45" class="w-full h-1 bg-slate-100 rounded-lg appearance-none cursor-pointer custom-slider" oninput="updateVal('hourly-rate', 'val-hourly-rate', ' €')">
-                        </div>
-
-                        <!-- Ticket Medio por Servicio -->
-                        <div>
-                            <div class="flex justify-between mb-1">
-                                <label class="text-xs font-semibold text-slate-600">Valor de ticket medio del servicio (€)</label>
-                                <span id="val-ticket" class="text-sm font-bold text-primary">70 €</span>
-                            </div>
-                            <input id="ticket" type="range" min="20" max="1500" step="5" value="70" class="w-full h-1 bg-slate-100 rounded-lg appearance-none cursor-pointer custom-slider" oninput="updateVal('ticket', 'val-ticket', ' €')">
-                        </div>
-
-                        <!-- Horas Administrativas Semanales -->
-                        <div>
-                            <div class="flex justify-between mb-1">
-                                <label class="text-xs font-semibold text-slate-600">Horas semanales en administración/papeleo</label>
-                                <span id="val-admin-hours" class="text-sm font-bold text-primary">10 h</span>
-                            </div>
-                            <input id="admin-hours" type="range" min="0" max="40" value="10" class="w-full h-1 bg-slate-100 rounded-lg appearance-none cursor-pointer custom-slider" oninput="updateVal('admin-hours', 'val-admin-hours', ' h')">
-                        </div>
-
-                        <!-- Llamadas y WhatsApps Perdidos por Día -->
-                        <div>
-                            <div class="flex justify-between mb-1">
-                                <label class="text-xs font-semibold text-slate-600">Llamadas/Mensajes no respondidos al día</label>
-                                <span id="val-missed-calls" class="text-sm font-bold text-primary">4</span>
-                            </div>
-                            <input id="missed-calls" type="range" min="0" max="25" value="4" class="w-full h-1 bg-slate-100 rounded-lg appearance-none cursor-pointer custom-slider" oninput="updateVal('missed-calls', 'val-missed-calls', '')">
-                        </div>
-                    </div>
-                </div>
-
-                <hr class="border-slate-100">
-
-                <!-- Evaluación de Sistemas y Métodos (Clasificador de Perfil) -->
-                <div>
-                    <h3 class="font-bold text-dark text-sm mb-4 flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-primary"></span> Métodos de Trabajo Actuales (Clasificador)
-                    </h3>
-                    <div class="flex flex-col gap-4">
-                        <!-- Criterio A: Citas y Agenda -->
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                            <span class="block text-xs font-bold text-slate-600 mb-2">1. ¿Cómo gestionas y coordinas tu agenda diaria?</span>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
-                                    <input type="radio" name="sys-agenda" value="1" checked class="text-primary focus:ring-primary">
-                                    <span>Libreta de papel / Libreta de apuntes</span>
-                                </label>
-                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
-                                    <input type="radio" name="sys-agenda" value="2" class="text-primary focus:ring-primary">
-                                    <span>Calendario del móvil (Manual)</span>
-                                </label>
-                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
-                                    <input type="radio" name="sys-agenda" value="3" class="text-primary focus:ring-primary">
-                                    <span>Software de gestión o CRM automático</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Criterio B: Facturación y Albaranes -->
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                            <span class="block text-xs font-bold text-slate-600 mb-2">2. ¿Cómo se emiten y envían las facturas o presupuestos?</span>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
-                                    <input type="radio" name="sys-fact" value="1" checked class="text-primary focus:ring-primary">
-                                    <span>Talonario físico de papel / Word</span>
-                                </label>
-                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
-                                    <input type="radio" name="sys-fact" value="2" class="text-primary focus:ring-primary">
-                                    <span>App de facturas (Copio datos a mano)</span>
-                                </label>
-                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
-                                    <input type="radio" name="sys-fact" value="3" class="text-primary focus:ring-primary">
-                                    <span>ERP conectado (Se emite automático)</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Criterio C: Seguimiento de Clientes -->
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                            <span class="block text-xs font-bold text-slate-600 mb-2">3. ¿Haces seguimiento a los presupuestos enviados?</span>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
-                                    <input type="radio" name="sys-follow" value="1" checked class="text-primary focus:ring-primary">
-                                    <span>No hago seguimiento por falta de tiempo</span>
-                                </label>
-                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
-                                    <input type="radio" name="sys-follow" value="2" class="text-primary focus:ring-primary">
-                                    <span>Reviso el chat de WhatsApp manualmente</span>
-                                </label>
-                                <label class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 cursor-pointer text-xs hover:border-primary/50">
-                                    <input type="radio" name="sys-follow" value="3" class="text-primary focus:ring-primary">
-                                    <span>CRM automatizado envía avisos</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <button onclick="calculateAudit()" class="w-full bg-primary hover:bg-emerald-600 text-dark font-bold py-4 rounded-xl shadow-lg transition-all text-center uppercase tracking-wider">
-                    Procesar Radiografía del Negocio
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 max-w-md mx-auto">
+                <button onclick="startQuiz()" class="w-full px-8 py-4.5 bg-brand-blue hover:bg-brand-blueDark text-white font-bold rounded-xl transition duration-300 shadow-lg shadow-brand-blue/20 flex items-center justify-center gap-2 group transform hover:-translate-y-0.5">
+                    Iniciar Test de Aptitud y Acceso
+                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </button>
             </div>
 
-            <!-- Panel de Entrada de Auditoría Lateral (Modo de Captación) -->
-            <div class="bg-dark text-white rounded-2xl p-6 shadow-xl flex flex-col justify-between border border-slate-800">
-                <div class="flex flex-col gap-4">
-                    <span class="text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20 self-start">Estrategia Comercial</span>
-                    <h3 class="text-lg font-bold">Cómo vender este Diagnóstico</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        Utiliza esta pestaña como tu soporte visual mientras charlas con el empresario en la furgoneta o en su oficina. Introduce los parámetros que te va confesando.
+            <!-- Beneficios rápidos -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 text-left max-w-3xl mx-auto border-t border-slate-800/60">
+                <div class="p-4 bg-slate-900/30 rounded-xl border border-slate-800/40">
+                    <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Tiempo Estimado</p>
+                    <p class="text-sm font-semibold text-slate-200 mt-1">~3 Minutos de análisis</p>
+                </div>
+                <div class="p-4 bg-slate-900/30 rounded-xl border border-slate-800/40">
+                    <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Metodología Sutil</p>
+                    <p class="text-sm font-semibold text-slate-200 mt-1">Análisis por escenarios reales</p>
+                </div>
+                <div class="p-4 bg-slate-900/30 rounded-xl border border-slate-800/40">
+                    <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Entregable</p>
+                    <p class="text-sm font-semibold text-slate-200 mt-1">Gráfica de Brecha Operativa</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= ESTADO 2: CUESTIONARIO INTERACTIVO ================= -->
+        <section id="step-quiz" class="hidden w-full max-w-2xl bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+            <!-- Barra de Progreso Superior -->
+            <div class="absolute top-0 left-0 right-0 h-1.5 bg-slate-800">
+                <div id="progress-bar" class="h-full bg-brand-blue transition-all duration-300" style="width: 0%;"></div>
+            </div>
+            
+            <div class="flex justify-between items-center mb-8 text-xs text-slate-400 font-medium">
+                <span class="bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700/50 flex items-center gap-1.5" id="question-category">
+                    <!-- Categoría dinámica -->
+                </span>
+                <span class="text-brand-blue font-bold" id="question-counter">Pregunta 1 de 20</span>
+            </div>
+
+            <!-- Contenedor dinámico de pregunta -->
+            <div id="quiz-container" class="min-h-[280px]">
+                <!-- Se inyecta dinámicamente con JS -->
+            </div>
+        </section>
+
+
+        <!-- ================= ESTADO 3: PANTALLA DE CARGA / PROCESAMIENTO ================= -->
+        <section id="step-loading" class="hidden w-full max-w-md text-center py-12 space-y-8">
+            <div class="relative w-24 h-24 mx-auto">
+                <div class="absolute inset-0 rounded-full border-4 border-slate-850"></div>
+                <div class="absolute inset-0 rounded-full border-4 border-t-brand-blue border-r-transparent animate-spin"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-brand-blue animate-pulse-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <h3 class="text-xl font-bold text-white tracking-tight" id="loading-title">Procesando respuestas</h3>
+                <p class="text-sm text-slate-400" id="loading-subtitle font-light">Analizando patrones cognitivos y madurez operativa...</p>
+            </div>
+        </section>
+
+
+        <!-- ================= ESTADO 4: CUADRO DE MANDO DE RESULTADOS (VENTA) ================= -->
+        <section id="step-results" class="hidden w-full space-y-12 py-4 animate-fade-in">
+            
+            <!-- Banner principal de resultados -->
+            <div class="bg-gradient-to-r from-slate-900 via-brand-darkBg to-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl">
+                <div class="space-y-3 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-emerald/10 text-xs font-bold text-brand-emerald uppercase tracking-wider border border-brand-emerald/20">
+                        Diagnóstico Completado
+                    </div>
+                    <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">Tu Perfil de Aptitud Operativa</h2>
+                    <p class="text-slate-400 max-w-xl text-sm leading-relaxed font-light">
+                        El sistema ha analizado tus respuestas bajo los estándares metodológicos de <strong class="text-white">LUCVEX AI Operations</strong>. A continuación, se detalla tu brecha actual frente al perfil ideal de salida.
                     </p>
-                    
-                    <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-col gap-2">
-                        <span class="text-xs font-bold text-slate-300">Estructura de Tarifas del Consultor:</span>
-                        <div class="flex justify-between text-xs">
-                            <span class="text-slate-400">Auditoría Exprés (Digital)</span>
-                            <span class="text-primary font-bold">0 € (Gancho)</span>
+                </div>
+                <!-- Puntuación General -->
+                <div class="text-center bg-slate-900/80 border border-slate-800 p-6 rounded-2xl min-w-[220px] shadow-inner">
+                    <span class="block text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Índice de Madurez de Entrada</span>
+                    <span class="text-5xl font-black text-white" id="total-score-display">00</span><span class="text-slate-500 text-lg"> / 60</span>
+                    <span class="block text-[11px] font-bold mt-2 px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700/50" id="badge-classification">Calculando...</span>
+                </div>
+            </div>
+
+            <!-- Gráfico Comparativo de Brecha de Aptitud (Gap Técnico) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                
+                <!-- Visualizador del Gap (Izquierda) -->
+                <div class="lg:col-span-6 bg-slate-900/30 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between space-y-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-1">Comparativa de Perfiles</h3>
+                        <p class="text-xs text-slate-500">Mapeo del estado de entrada vs. el perfil de salida certificado.</p>
+                    </div>
+
+                    <!-- Gráfico de barras de dimensiones -->
+                    <div class="space-y-5">
+                        <!-- Perfil Económico -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs">
+                                <span class="font-bold text-slate-300">Perfil de Gestión de Recursos (Económico)</span>
+                                <span class="text-slate-400 font-medium" id="economic-score-text">0 / 15</span>
+                            </div>
+                            <div class="h-2.5 w-full bg-slate-850 rounded-full overflow-hidden relative">
+                                <div class="h-full bg-brand-blue rounded-full transition-all duration-1000" id="bar-economic-user" style="width: 0%;"></div>
+                                <div class="absolute right-0 top-0 h-full w-0.5 bg-brand-emerald" title="Perfil Ideal de Salida"></div>
+                            </div>
                         </div>
-                        <div class="flex justify-between text-xs border-t border-slate-700 pt-2 mt-1">
-                            <span class="text-slate-400">Auditoría Avanzada (Presencial)</span>
-                            <span class="font-bold">350 € - 600 €</span>
+
+                        <!-- Perfil Cognitivo -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs">
+                                <span class="font-bold text-slate-300">Lógica e Infraestructura Técnica (Cognitivo)</span>
+                                <span class="text-slate-400 font-medium" id="cognitive-score-text">0 / 15</span>
+                            </div>
+                            <div class="h-2.5 w-full bg-slate-850 rounded-full overflow-hidden relative">
+                                <div class="h-full bg-brand-blue rounded-full transition-all duration-1000" id="bar-cognitive-user" style="width: 0%;"></div>
+                                <div class="absolute right-0 top-0 h-full w-0.5 bg-brand-emerald" title="Perfil Ideal de Salida"></div>
+                            </div>
                         </div>
-                        <p class="text-[10px] text-slate-500 italic mt-1">
-                            Tip: Ofrece descontar el importe de la auditoría premium si el cliente contrata la instalación del sistema de IA contigo.
+
+                        <!-- Perfil Psicológico -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs">
+                                <span class="font-bold text-slate-300">Resiliencia y Pensamiento Analítico (Psicológico)</span>
+                                <span class="text-slate-400 font-medium" id="psychology-score-text">0 / 15</span>
+                            </div>
+                            <div class="h-2.5 w-full bg-slate-850 rounded-full overflow-hidden relative">
+                                <div class="h-full bg-brand-blue rounded-full transition-all duration-1000" id="bar-psychology-user" style="width: 0%;"></div>
+                                <div class="absolute right-0 top-0 h-full w-0.5 bg-brand-emerald" title="Perfil Ideal de Salida"></div>
+                            </div>
+                        </div>
+
+                        <!-- Perfil Motivación -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs">
+                                <span class="font-bold text-slate-300">Grado de Motivación y Compromiso</span>
+                                <span class="text-slate-400 font-medium" id="motivation-score-text">0 / 15</span>
+                            </div>
+                            <div class="h-2.5 w-full bg-slate-850 rounded-full overflow-hidden relative">
+                                <div class="h-full bg-brand-blue rounded-full transition-all duration-1000" id="bar-motivation-user" style="width: 0%;"></div>
+                                <div class="absolute right-0 top-0 h-full w-0.5 bg-brand-emerald" title="Perfil Ideal de Salida"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Leyendas explicativas -->
+                    <div class="flex gap-4 pt-4 border-t border-slate-800/65 text-[11px] text-slate-400">
+                        <div class="flex items-center gap-1.5">
+                            <span class="h-2.5 w-2.5 rounded bg-brand-blue"></span>
+                            Tu Estado Actual
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="h-2.5 w-0.5 bg-brand-emerald"></span>
+                            Perfil Ideal de Salida (Auditor Certificado)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Análisis de la Brecha / Copy Persuasivo (Derecha) -->
+                <div class="lg:col-span-6 bg-slate-900/30 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between space-y-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-2">Interpretación del Diagnóstico</h3>
+                        <p class="text-sm text-slate-300 leading-relaxed font-light" id="gap-interpretation-text">
+                            <!-- El texto dinámico se inyectará aquí -->
                         </p>
                     </div>
-                </div>
 
-                <div class="mt-6 pt-6 border-t border-slate-800 flex flex-col gap-2">
-                    <span class="text-xs text-slate-400">¿Estás listo? Da click en el botón del cuestionario para visualizar la radiografía en tiempo real.</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECCIÓN 2: RADIOGRAFÍA & DIAGNÓSTICO -->
-        <section id="sec-radiography" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Panel Izquierdo: Resumen Financiero y Diagnóstico Oculto -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col gap-6">
-                <div>
-                    <span class="text-xs font-bold text-primary uppercase">Diagnóstico Financiero</span>
-                    <h2 class="text-xl font-bold text-dark" id="rad-biz-name">Clínica Dental Pérez</h2>
-                    <p class="text-xs text-slate-400">Análisis detallado de pérdidas y fugas anualizadas.</p>
-                </div>
-
-                <!-- Perfil Detectado Badge -->
-                <div class="p-4 rounded-xl flex flex-col gap-1 text-center" id="perfil-badge-container">
-                    <span class="text-xs font-semibold uppercase text-slate-500">Perfil de Madurez Digital:</span>
-                    <span id="txt-perfil" class="text-lg font-black tracking-wide">MEDIO - DIGITALIZACIÓN FRAGMENTADA</span>
-                </div>
-
-                <!-- Datos de Fuga Clave -->
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-rose-50 border border-rose-100 p-4 rounded-xl text-center">
-                        <span class="block text-xs text-slate-500 font-medium">Fuga Mensual</span>
-                        <span id="txt-fuga-mensual" class="text-2xl font-black text-rose-600">0.000 €</span>
-                    </div>
-                    <div class="bg-rose-50 border border-rose-100 p-4 rounded-xl text-center">
-                        <span class="block text-xs text-slate-500 font-medium">Fuga Anual</span>
-                        <span id="txt-fuga-anual" class="text-2xl font-black text-rose-600">00.000 €</span>
-                    </div>
-                </div>
-
-                <!-- Desglose de Fugas Ocultas -->
-                <div class="flex flex-col gap-3">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Origen de las pérdidas</h3>
-                    <!-- Fuga llamadas -->
-                    <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg border border-slate-100">
-                        <div class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-rose-500"></span>
-                            <span class="text-xs font-bold">Llamadas No Rescatadas</span>
-                        </div>
-                        <span id="val-fuga-llamadas" class="text-xs font-bold text-slate-700">000 €/mes</span>
-                    </div>
-                    <!-- Fuga admin -->
-                    <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg border border-slate-100">
-                        <div class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-amber-500"></span>
-                            <span class="text-xs font-bold">Horas de Oficina Perdidas</span>
-                        </div>
-                        <span id="val-fuga-admin" class="text-xs font-bold text-slate-700">000 €/mes</span>
-                    </div>
-                    <!-- Fuga seguimiento -->
-                    <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg border border-slate-100">
-                        <div class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
-                            <span class="text-xs font-bold">Presupuestos Olvidados</span>
-                        </div>
-                        <span id="val-fuga-follow" class="text-xs font-bold text-slate-700">000 €/mes</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Panel Central: Gráfica de Radiografía Visual -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between gap-6 lg:col-span-2">
-                <div>
-                    <h3 class="font-bold text-dark text-lg">Distribución de Pérdidas Ocultas</h3>
-                    <p class="text-xs text-slate-400">Proporción del dinero que se desvanece de forma invisible cada mes en el negocio.</p>
-                </div>
-
-                <div class="relative flex justify-center items-center h-64">
-                    <canvas id="fugasChart"></canvas>
-                </div>
-
-                <div class="bg-primary/10 border border-primary/20 p-4 rounded-xl text-center">
-                    <p class="text-xs text-slate-700 font-medium">
-                        "Implementando un asistente inteligente de respuesta rápida y optimizando los flujos de oficina con IA, se puede recuperar de manera directa hasta el <strong class="text-primary-dark">85% del capital fugado</strong>."
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECCIÓN 3: RECOMENDACIONES & ROI -->
-        <section id="sec-proposal" class="hidden flex flex-col gap-8">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Tarjeta de Diagnóstico de Recomendaciones -->
-                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between gap-6">
-                    <div>
-                        <span class="text-xs font-bold text-primary uppercase">Ecosistema Propuesto</span>
-                        <h3 class="text-xl font-bold text-dark">Propuesta de Optimización</h3>
-                        <p class="text-xs text-slate-400 mt-1">Este es el kit de herramientas recomendado específicamente para corregir tus procesos.</p>
-                    </div>
-
-                    <!-- Lista de Herramientas -->
-                    <div id="container-tools-list" class="flex flex-col gap-3">
-                        <!-- Se rellenará dinámicamente -->
-                    </div>
-
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs">
-                        <span class="block font-bold text-dark mb-1">Mantenimiento de Soporte Local:</span>
-                        <p class="text-slate-500">Incluye soporte presencial/remoto de tu consultor y ajustes continuos a la IA para adaptarse a tu negocio diario.</p>
-                    </div>
-                </div>
-
-                <!-- Tarjeta de Impacto de Ahorro y Plazos -->
-                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between gap-6 lg:col-span-2">
-                    <div>
-                        <span class="text-xs font-bold text-primary uppercase">Retorno de Inversión (ROI)</span>
-                        <h3 class="text-xl font-bold text-dark">Impacto Económico Estimado</h3>
-                        <p class="text-xs text-slate-400">Cuánto vas a ahorrar, cuánto vas a invertir y en cuánto tiempo se amortiza.</p>
-                    </div>
-
-                    <!-- Tabla de ROI -->
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-xs">
-                            <thead>
-                                <tr class="border-b border-slate-200 text-slate-400 uppercase tracking-wider">
-                                    <th class="py-2">Concepto</th>
-                                    <th class="py-2">Métrica Actual</th>
-                                    <th class="py-2 text-primary font-bold">Estado Optimizado</th>
-                                    <th class="py-2 text-dark">Ahorro Mensual</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100">
-                                <tr>
-                                    <td class="py-3 font-semibold">Tiempo en Oficina</td>
-                                    <td id="table-admin-current" class="py-3 text-slate-500">00 h/mes</td>
-                                    <td id="table-admin-optim" class="py-3 text-primary font-bold font-mono">00 h/mes</td>
-                                    <td id="table-admin-save" class="py-3 font-bold font-mono text-dark">000 €/mes</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-3 font-semibold">Captación / Clientes Perdidos</td>
-                                    <td id="table-calls-current" class="py-3 text-slate-500">00 llamadas</td>
-                                    <td id="table-calls-optim" class="py-3 text-primary font-bold font-mono">0 llamadas</td>
-                                    <td id="table-calls-save" class="py-3 font-bold font-mono text-dark">000 €/mes</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-3 font-semibold">Presupuestos sin seguimiento</td>
-                                    <td id="table-presup-current" class="py-3 text-slate-500">Olvidado</td>
-                                    <td id="table-presup-optim" class="py-3 text-primary font-bold font-mono">100% Automatizado</td>
-                                    <td id="table-presup-save" class="py-3 font-bold font-mono text-dark">000 €/mes</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Resumen del Presupuesto de Implantación -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-slate-100 pt-6">
-                        <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl text-center">
-                            <span class="block text-[10px] text-slate-400 font-bold uppercase">Inversión Setup</span>
-                            <span id="lbl-setup" class="text-lg font-extrabold text-dark">0.000 €</span>
-                        </div>
-                        <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl text-center">
-                            <span class="block text-[10px] text-slate-400 font-bold uppercase">Mantenimiento Mensual</span>
-                            <span id="lbl-maint" class="text-lg font-extrabold text-dark">000 €/mes</span>
-                        </div>
-                        <div class="p-3 bg-emerald-50 border border-emerald-100 rounded-xl text-center">
-                            <span class="block text-[10px] text-slate-400 font-bold uppercase">Amortización Estimada</span>
-                            <span id="lbl-amort" class="text-lg font-extrabold text-primary">00 días</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Simulador de WhatsApp en tiempo real -->
-            <div class="bg-dark text-white rounded-2xl p-6 shadow-xl border border-slate-800 flex flex-col gap-4">
-                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                    <div class="flex items-center gap-2">
-                        <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-                        <h4 class="font-bold text-sm">Simulador de Asistente de IA (WhatsApp)</h4>
-                    </div>
-                    <span class="text-xs text-slate-400">Demostración en vivo</span>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                    <div>
+                    <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl space-y-1">
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">El Océano Azul de la Auditoría</p>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Escribe una consulta rápida a continuación simulando ser un cliente potencial. Nuestro sistema de simulación procesará la respuesta imitando el comportamiento de un Agente conversacional personalizado con el tono de tu negocio.
+                            Las empresas están dispuestas a pagar altas sumas por erradicar tareas repetitivas porque cada hora de un administrativo realizando copiado manual representa pérdidas directas de rendimiento de personal.
                         </p>
-                        <div class="mt-4 flex gap-2">
-                            <input id="sim-input" type="text" placeholder="Ej. Quiero cita para reparar caldera..." class="flex-grow bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-primary">
-                            <button onclick="sendSimulatedMessage()" class="bg-primary hover:bg-emerald-600 text-dark px-4 py-2 rounded-xl text-xs font-bold transition-all">Enviar</button>
-                        </div>
-                    </div>
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 h-36 overflow-y-auto flex flex-col gap-2 font-mono text-xs text-slate-300" id="chat-box">
-                        <div class="text-slate-500 italic">[El chat está vacío. Envía un mensaje...]</div>
                     </div>
                 </div>
             </div>
+
+            <!-- CALCULADORA DE RETORNO DE INVERSIÓN (ROI) INTERACTIVA -->
+            <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6 shadow-xl">
+                <div class="space-y-1.5">
+                    <div class="inline-block px-2.5 py-0.5 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-xs font-bold text-brand-blue uppercase tracking-wider">
+                        Estrategia de Monetización
+                    </div>
+                    <h3 class="text-2xl font-black text-white tracking-tight">Simulador de Ingresos del Auditor Certificado</h3>
+                    <p class="text-slate-400 text-sm font-light">Calcula tus ingresos mensuales estimados como Consultor de Optimización de Procesos Administrativos basándote en tarifas realistas del mercado High-Ticket.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                    <!-- Controles -->
+                    <div class="space-y-6">
+                        <!-- Control 1: Auditorías al mes -->
+                        <div class="space-y-3">
+                            <div class="flex justify-between text-sm font-semibold">
+                                <span class="text-slate-300">Auditorías / Optimizaciones al mes:</span>
+                                <span class="text-brand-blue" id="slider-projects-val">2 Proyectos</span>
+                            </div>
+                            <input id="slider-projects" type="range" min="1" max="8" value="2" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-brand-blue">
+                            <span class="block text-[11px] text-slate-500">Número de clientes que optimizas mensualmente (ej. automatización CRM o Recepción Inteligente).</span>
+                        </div>
+
+                        <!-- Control 2: Precio por auditoría -->
+                        <div class="space-y-3">
+                            <div class="flex justify-between text-sm font-semibold">
+                                <span class="text-slate-300">Tarifa media por proyecto (High-Ticket):</span>
+                                <span class="text-brand-emerald" id="slider-price-val">2.500 €</span>
+                            </div>
+                            <input id="slider-price" type="range" min="1000" max="6000" step="500" value="2500" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-brand-emerald">
+                            <span class="block text-[11px] text-slate-500">Lo que cobra un Auditor Certificado de LUCVEX por levantar e integrar una infraestructura completa.</span>
+                        </div>
+                    </div>
+
+                    <!-- Output visual de ingresos -->
+                    <div class="bg-slate-900/80 border border-slate-800 p-6 rounded-xl flex flex-col justify-center items-center text-center shadow-inner relative overflow-hidden">
+                        <div class="absolute -top-12 -right-12 h-32 w-32 bg-brand-emerald/5 rounded-full filter blur-xl"></div>
+                        <span class="text-xs text-slate-500 uppercase tracking-wider font-bold mb-1">Ingresos Mensuales Estimados</span>
+                        <span class="text-4xl md:text-5xl font-black text-brand-emerald" id="calc-result-display">5.000 €</span>
+                        <span class="text-xs text-slate-400 mt-2 font-light max-w-xs">Equivalente a recuperar el coste de tu inversión académica en tu primer mes activo.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROGRAMA ACADÉMICO / PILARES TÉCNICOS -->
+            <div class="space-y-6 pt-6 border-t border-slate-800/80">
+                <h3 class="text-2xl font-extrabold text-white text-center tracking-tight">Estructura Académica que Construirás en la Certificación</h3>
+                <p class="text-slate-400 text-sm max-w-xl mx-auto text-center font-light leading-relaxed">
+                    Un programa intensivo diseñado para llevarte de tu nivel de entrada actual al dominio absoluto de la arquitectura de sistemas empresariales.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+                    <!-- Bloque 1 -->
+                    <div class="bg-slate-900/25 border border-slate-800/85 p-6 rounded-xl space-y-4">
+                        <div class="h-10 w-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-brand-blue">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                        </div>
+                        <h4 class="text-base font-bold text-white">1. Metodología de Auditoría de Fugas</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">Aprende a analizar las ineficiencias de procesos, calcular pérdidas de tiempo de personal y estructurar la propuesta económica perfecta que las empresas no puedan rechazar.</p>
+                    </div>
+
+                    <!-- Bloque 2 -->
+                    <div class="bg-slate-900/25 border border-slate-800/85 p-6 rounded-xl space-y-4">
+                        <div class="h-10 w-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        </div>
+                        <h4 class="text-base font-bold text-white">2. Arquitectura de Integración Técnica</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">Despliega de manera práctica automatizaciones unificando CRMs, mensajería instantánea y agentes de voz inteligentes automatizados sin necesidad de escribir código complejo.</p>
+                    </div>
+
+                    <!-- Bloque 3 -->
+                    <div class="bg-slate-900/25 border border-slate-800/85 p-6 rounded-xl space-y-4">
+                        <div class="h-10 w-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-brand-emerald">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <h4 class="text-base font-bold text-white">3. El Arte de la Venta del Servicio</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">Aprende las estrategias de posicionamiento profesional para ofrecer servicios High-Ticket y captar tus primeros clientes utilizando el respaldo de marca de la academia.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAJA DE OFERTA DE ADMISIÓN / CHECKOUT -->
+            <div class="max-w-xl mx-auto bg-slate-900/50 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6 text-center shadow-xl">
+                <div class="space-y-2">
+                    <span class="text-xs font-bold text-brand-emerald bg-brand-emerald/10 px-3.5 py-1.5 rounded-full border border-brand-emerald/20">PROGRAMA HIGH-TICKET SELECCIONADO</span>
+                    <h3 class="text-2xl font-black text-white tracking-tight">Certificación Profesional en Ingeniería de Procesos</h3>
+                    <p class="text-xs text-slate-400 font-light max-w-sm mx-auto">Admisión restringida a perfiles validados mediante este diagnóstico. Formación premium con mentoría directa de Randall Vargas.</p>
+                </div>
+
+                <div class="py-4 border-y border-slate-850 space-y-3">
+                    <div class="flex justify-between items-center text-sm px-2">
+                        <span class="text-slate-400 font-medium">Formato:</span>
+                        <span class="text-white font-bold">100% Práctico e interactivo</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm px-2">
+                        <span class="text-slate-400 font-medium">Duración de la especialización:</span>
+                        <span class="text-white font-bold">8 Semanas</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm px-2">
+                        <span class="text-slate-400 font-medium">Inversión recomendada:</span>
+                        <span class="text-brand-emerald font-black text-lg">Inversión Profesional High-Ticket</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <a href="https://lucvex.com" class="block w-full text-center py-4 bg-brand-blue hover:bg-brand-blueDark text-white font-extrabold rounded-xl transition duration-300 shadow-lg shadow-brand-blue/20 transform hover:-translate-y-0.5">
+                        Agendar Entrevista de Admisión
+                    </a>
+                    <p class="text-[10px] text-slate-500 font-medium">*La admisión final se decidirá analizando el detalle de tu diagnóstico técnico y tu compromiso profesional.</p>
+                </div>
+            </div>
+
         </section>
 
     </main>
 
-    <!-- Footer Corporativo -->
-    <footer class="bg-slate-900 text-slate-400 text-center py-4 text-xs border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-6">
-            <p>© 2026 CEREBRO DIGITAL - Consultoría de Optimización de Procesos. Todos los derechos reservados.</p>
+    <!-- FOOTER SIMPLE -->
+    <footer class="border-t border-slate-850 py-6 bg-slate-950/40 text-xs text-slate-500">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p>&copy; 2026 Lucvex AI Operations. Todos los derechos reservados.</p>
+            <div class="flex space-x-6">
+                <a href="#" class="hover:text-slate-300 transition">Aviso Legal</a>
+                <a href="#" class="hover:text-slate-300 transition">Política de Privacidad</a>
+            </div>
         </div>
     </footer>
 
-    <!-- JavaScript para el Motor de Diagnóstico -->
+    <!-- LÓGICA DE CONTROL DEL EMBUDO INTERACTIVO -->
     <script>
-        let currentTab = 'audit';
-        let fugasChart = null;
-        let diagnosticData = null;
-
-        // Cambiar entre pestañas
-        function switchTab(tabId) {
-            document.getElementById('sec-audit').classList.add('hidden');
-            document.getElementById('sec-radiography').classList.add('hidden');
-            document.getElementById('sec-proposal').classList.add('hidden');
-
-            document.getElementById('tab-audit').className = 'flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all text-slate-500 hover:text-dark';
-            document.getElementById('tab-radiography').className = 'flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all text-slate-500 hover:text-dark';
-            document.getElementById('tab-proposal').className = 'flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all text-slate-500 hover:text-dark';
-
-            if (tabId === 'audit') {
-                document.getElementById('sec-audit').classList.remove('hidden');
-                document.getElementById('tab-audit').className = 'flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all bg-primary text-dark shadow';
-            } else if (tabId === 'radiography') {
-                if (!diagnosticData) {
-                    calculateAudit();
-                }
-                document.getElementById('sec-radiography').classList.remove('hidden');
-                document.getElementById('tab-radiography').className = 'flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all bg-primary text-dark shadow';
-                renderChart();
-            } else if (tabId === 'proposal') {
-                if (!diagnosticData) {
-                    calculateAudit();
-                }
-                document.getElementById('sec-proposal').classList.remove('hidden');
-                document.getElementById('tab-proposal').className = 'flex-1 py-3 text-center font-semibold text-sm rounded-lg transition-all bg-primary text-dark shadow';
+        // 20 PREGUNTAS SUTILES DE APRECIACIÓN INDIRECTA
+        const quizQuestions = [
+            // DIMENSIÓN 1: PERFIL ECONÓMICO Y CAPACIDAD DE INVERSIÓN
+            {
+                id: 1,
+                dim: "Económica",
+                category: "Gestión de Recursos",
+                question: "Si mañana tuvieras que realizar un viaje de trabajo crucial a 400 km de distancia, ¿cuál sería tu elección de transporte?",
+                options: [
+                    { text: "Autobús o tren de línea regular: priorizo el menor gasto posible aunque requiera adaptarme a sus horarios.", score: 1 },
+                    { text: "Mi coche particular: controlo mis tiempos y viajo cómodo, asumiendo el gasto de gasolina y peajes.", score: 2 },
+                    { text: "Tren de alta velocidad (AVE) en clase preferente o avión: pago lo que haga falta con tal de llegar descansado, con conexión Wi-Fi para trabajar y en la mitad de tiempo.", score: 3 }
+                ]
+            },
+            {
+                id: 2,
+                dim: "Económica",
+                category: "Coste de Oportunidad",
+                question: "Cuando necesitas resolver un problema técnico menor en tu casa o coche (como una cerradura atascada o un ruido extraño), ¿cómo actúas?",
+                options: [
+                    { text: "Busco tutoriales en YouTube durante horas e intento arreglarlo yo mismo con lo que tengo a mano para ahorrarme el técnico.", score: 1 },
+                    { text: "Le pregunto a un amigo que sepa del tema o compro la herramienta exacta para intentar solucionarlo el fin de semana.", score: 2 },
+                    { text: "Llamo directamente al mejor profesional disponible en mi zona; mi tiempo vale más que el coste de su tarifa.", score: 3 }
+                ]
+            },
+            {
+                id: 3,
+                dim: "Económica",
+                category: "Infraestructura",
+                question: "Echa un vistazo al espacio donde trabajas o estudias ahora mismo. Si tuvieras que vender todo tu equipo informático actual en el mercado de segunda mano, ¿por cuánto crees que se vendería?",
+                options: [
+                    { text: "Por menos de 400€. Cumple su función básica para navegar y escribir textos, pero es un equipo antiguo o de gama de entrada.", score: 1 },
+                    { text: "Entre 400€ y 1.200€. Es un buen equipo, rápido y fiable para el día a día.", score: 2 },
+                    { text: "Más de 1.200€. Uso maquinaria de alto rendimiento, pantallas profesionales o dispositivos de última generación.", score: 3 }
+                ]
+            },
+            {
+                id: 4,
+                dim: "Económica",
+                category: "Filosofía Financiera",
+                question: "Imagina que decides apuntarte a un gimnasio o club deportivo. ¿Qué modalidad de pago se adapta mejor a tu filosofía financiera actual?",
+                options: [
+                    { text: "Busco la oferta mensual más económica disponible, aunque tenga restricciones de horario o instalaciones básicas.", score: 1 },
+                    { text: "Pago una mensualidad estándar en un buen sitio que me garantice comodidad y flexibilidad.", score: 2 },
+                    { text: "Prefiero pagar una membresía anual premium por adelantado o contratar un entrenador personal para asegurarme resultados sin perder el tiempo.", score: 3 }
+                ]
+            },
+            {
+                id: 5,
+                dim: "Económica",
+                category: "Valor del Orden",
+                question: "Si una suscripción digital de una herramienta de organización personal que usas a diario sube de precio 15€ al mes, ¿cuál es tu reacción inmediata?",
+                options: [
+                    { text: "Me doy de baja de inmediato y busco una alternativa que sea 100% gratuita, aunque tenga que pasar mis datos manualmente.", score: 1 },
+                    { text: "Me molesta el incremento, reviso si realmente le saco partido y evalúo si la mantengo el próximo mes.", score: 2 },
+                    { text: "Ni lo noto o la mantengo sin dudarlo; si la herramienta me ahorra aunque sea media hora de desorden al mes, ya está pagada.", score: 3 }
+                ]
+            },
+            // DIMENSIÓN 2: PERFIL COGNITIVO Y LÓGICA DE HERRAMIENTAS
+            {
+                id: 6,
+                dim: "Cognitiva",
+                category: "Orden y Estructura",
+                question: "Cuando organizas las carpetas y archivos en tu ordenador o los papeles de tus facturas, ¿qué sistema utilizas?",
+                options: [
+                    { text: "Lo guardo casi todo en el \"Escritorio\" o en una carpeta general y luego utilizo el buscador cuando necesito encontrar algo.", score: 1 },
+                    { text: "Tengo carpetas principales por temáticas (Trabajo, Finanzas, Personal), aunque a veces dudo de dónde meter ciertos archivos.", score: 2 },
+                    { text: "Tengo una estructura jerárquica estricta con códigos, fechas o etiquetas visuales; cualquier persona podría encontrar lo que busca en mi equipo en 5 segundos.", score: 3 }
+                ]
+            },
+            {
+                id: 7,
+                dim: "Cognitiva",
+                category: "Lógica Secuencial",
+                question: "Imagina que vas a montar un mueble modular complejo en casa que viene completamente desmontado. ¿Cuál es tu procedimiento?",
+                options: [
+                    { text: "Abro la caja, esparzo las piezas y empiezo a armarlo de forma intuitiva. Solo miro las instrucciones si me sobran tornillos o algo no encaja.", score: 1 },
+                    { text: "Reviso el manual por encima para entender la idea general y voy consultando cada paso detalladamente mientras avanzo.", score: 2 },
+                    { text: "Antes de tocar una sola pieza, clasifico todos los tornillos por tamaño, cuento los paneles según el inventario del manual y sigo el orden lógico estricto de la guía.", score: 3 }
+                ]
+            },
+            {
+                id: 8,
+                dim: "Cognitiva",
+                category: "Planificación Temporal",
+                question: "¿Cómo gestionas habitualmente tu lista de tareas pendientes del día a día para que no se te olvide nada?",
+                options: [
+                    { text: "Lo apunto en pósits sueltos, cuadernos de notas o simplemente confío en mi memoria para ir resolviendo lo que va saliendo.", score: 1 },
+                    { text: "Utilizo una aplicación de notas en el móvil o un calendario digital básico donde anoto las citas importantes y recordatorios.", score: 2 },
+                    { text: "Utilizo un sistema de bloques de tiempo en el calendario o un tablero visual donde las tareas pasan por estados claros (Por hacer, En proceso, Completado).", score: 3 }
+                ]
+            },
+            {
+                id: 9,
+                dim: "Cognitiva",
+                category: "Enfoque de Eficiencia",
+                question: "Si en tu trabajo actual te piden rellenar un informe diario con los mismos 10 datos idénticos todas las tardes, ¿qué es lo primero que pasa por tu mente?",
+                options: [
+                    { text: "Lo asumo como parte de mi rutina diaria; lo hago rápido para quitármelo de encima cuanto antes.", score: 1 },
+                    { text: "Pienso que es una pérdida de tiempo e intento crear una plantilla o truco básico en Excel para tardar la mitad.", score: 2 },
+                    { text: "Me obsesiono con buscar la forma de conectar la fuente de los datos directamente con el informe para que se autorellene solo sin que yo intervenga.", score: 3 }
+                ]
+            },
+            {
+                id: 10,
+                dim: "Cognitiva",
+                category: "Procesamiento de Datos",
+                question: "Cuando alguien te explica cómo llegar a un sitio nuevo que está en una zona complicada, ¿qué tipo de indicación prefieres?",
+                options: [
+                    { text: "\"Gira donde está la gasolinera grande, pasas dos calles y al lado de una cafetería con toldo azul ahí es\". Referencias visuales de toda la vida.", score: 1 },
+                    { text: "\"Sigue recto por la avenida principal durante un kilómetro y en la tercera rotonda toma la segunda salida a la derecha\". Datos de distancias y giros concretos.", score: 2 },
+                    { text: "\"Pásame la ubicación exacta por WhatsApp o las coordenadas para poner el GPS en el mapa\". Datos exactos de geolocalización.", score: 3 }
+                ]
+            },
+            // DIMENSIÓN 3: PERFIL PSICOLÓGICO Y RESILIENCIA OPERATIVA
+            {
+                id: 11,
+                dim: "Psicología Operativa",
+                category: "Tolerancia al Fallo",
+                question: "Estás terminando un documento importante y, de repente, la pantalla se congela y el programa se cierra inesperadamente sin haber guardado los últimos 30 minutos de trabajo. ¿Cuál es tu reacción psicológica inicial?",
+                options: [
+                    { text: "Me invade el enfado o la frustración, cierro el ordenador y necesito apartarme un buen rato antes de volver a empezar desde cero.", score: 1 },
+                    { text: "Suspiro con resignación, vuelvo a abrir el programa esperando que haya una copia de autorrecuperación y empiezo a rehacerlo de memoria.", score: 2 },
+                    { text: "Mantengo la calma de inmediato; busco en las carpetas temporales del sistema el archivo de respaldo oculto para ver qué puedo rescatar antes de escribir nada.", score: 3 }
+                ]
+            },
+            {
+                id: 12,
+                dim: "Psicología Operativa",
+                category: "Enfrentamiento Técnico",
+                question: "Cuando decides aprender a usar una aplicación o dispositivo tecnológico nuevo y una función no responde como tú esperas al primer intento, ¿qué haces?",
+                options: [
+                    { text: "Me desespero con facilidad, asumo que la tecnología es demasiado compleja para mí y prefiero pedirle ayuda a otra persona.", score: 1 },
+                    { text: "Sigo probando botones al azar un rato más y, si sigue sin funcionar, lo dejo aparcado para mirarlo en otro momento con más calma.", score: 2 },
+                    { text: "Aíslo el problema: leo la sección específica de ayuda, sigo los pasos uno a uno y desgloso el fallo hasta entender por qué no responde.", score: 3 }
+                ]
+            },
+            {
+                id: 13,
+                dim: "Psicología Operativa",
+                category: "Manejo de Incertidumbre",
+                question: "En tus proyectos, trabajos o metas personales, ¿cómo manejas la incertidumbre de no saber exactamente cuánto tardarás en ver los resultados?",
+                options: [
+                    { text: "Me cuesta mantener la motivación; si no veo avances claros o recompensas en los primeros días, tiendo a perder el interés o cambiar de rumbo.", score: 1 },
+                    { text: "Me genera cierta ansiedad, pero me obligo a continuar avanzando paso a paso confiando en que el esfuerzo valdrá la pena a medio plazo.", score: 2 },
+                    { text: "Entiendo los procesos como sistemas de siembra y cosecha: me enfoco exclusivamente en ejecutar el plan diario con disciplina y confío plenamente en la inercia del método a largo plazo.", score: 3 }
+                ]
+            },
+            {
+                id: 14,
+                dim: "Psicología Operativa",
+                category: "Improvisación Lógica",
+                question: "Imagina que estás siguiendo una receta de cocina paso a paso y descubres a mitad del proceso que te falta un ingrediente secundario importante. ¿Cómo lo resuelves?",
+                options: [
+                    { text: "Me agobio, detengo la receta por completo y cambio el menú por algo más sencillo para no complicarme la vida.", score: 1 },
+                    { text: "Salgo corriendo a la tienda más cercana a comprarlo o improviso un sustituto rápido cruzando los dedos para que salga bien.", score: 2 },
+                    { text: "Analizo la función del ingrediente faltante (espesante, endulzante, etc.) y busco un sustituto con la misma base lógica/química en mi despensa para adaptar la receta con precisión.", score: 3 }
+                ]
+            },
+            {
+                id: 15,
+                dim: "Psicología Operativa",
+                category: "Sustitución de Creencias",
+                question: "Ante una crítica directa sobre la forma en que organizas tu trabajo o gestionas tus tareas diarias, ¿cuál es tu actitud mental subconsciente?",
+                options: [
+                    { text: "Me lo tomo como algo personal, me pongo a la defensiva o me desmotiva sentirme cuestionado.", score: 1 },
+                    { text: "Escucho con educación, aunque por dentro pienso que mi método me funciona bien a mí y raramente cambio mi forma de actuar.", score: 2 },
+                    { text: "Analizo la crítica con frialdad y escepticismo radical: si el argumento demuestra que su método es un 10% más eficiente que el mío, desecho mi sistema anterior sin ningún apego emocional.", score: 3 }
+                ]
+            },
+            // DIMENSIÓN 4: GRADO DE MOTIVACIÓN Y COMPROMISO
+            {
+                id: 16,
+                dim: "Motivación",
+                category: "Ritmo de Ejecución",
+                question: "Si decides empezar a leer un libro denso o hacer un curso por tu cuenta, ¿cómo suele ser tu ritmo de ejecución real?",
+                options: [
+                    { text: "Lo empiezo con mucho entusiasmo los primeros días, pero si me surge mucho trabajo o se vuelve complejo, me cuesta terminarlo y suelo dejarlo a medias.", score: 1 },
+                    { text: "Avanzo a rachas cuando encuentro huecos libres, tardando más de lo previsto, pero hago el esfuerzo por terminarlo tarde o temprano.", score: 2 },
+                    { text: "Agendo bloques de tiempo fijos e innegociables en mi semana; avanzo de forma constante y no paro hasta completar la última página o lección.", score: 3 }
+                ]
+            },
+            {
+                id: 17,
+                dim: "Motivación",
+                category: "Preferencia de Reto",
+                question: "Imagina que te ofrecen dos proyectos profesionales diferentes para los próximos meses. ¿Cuál elegirías según tus metas actuales?",
+                options: [
+                    { text: "Un proyecto sencillo que me garantice un ingreso rápido el primer mes, aunque no aprenda nada nuevo ni crezca a futuro.", score: 1 },
+                    { text: "Un proyecto intermedio donde gane bien pero que requiera actualizar algunos conocimientos por mi cuenta.", score: 2 },
+                    { text: "Un proyecto exigente que suponga dominar una metodología de vanguardia; sé que me costará esfuerzo al inicio, pero multiplicará mi valor de mercado a largo plazo.", score: 3 }
+                ]
+            },
+            {
+                id: 18,
+                dim: "Motivación",
+                category: "Persistencia",
+                question: "Cuando te fijas un propósito de año nuevo (como aprender un idioma, mejorar tu salud o cambiar de sector profesional), ¿qué suele pasar cuando llega el mes de marzo?",
+                options: [
+                    { text: "La rutina y el cansancio diario terminan ganando la partida y suelo posponer el objetivo para \"cuando esté más tranquilo\".", score: 1 },
+                    { text: "Mantengo el propósito a medias, aplicando cambios de forma intermitente cuando la motivación regresa.", score: 2 },
+                    { text: "El propósito ya se ha convertido en una disciplina diaria integrada; mido mis avances y ajusto mis hábitos de forma constante.", score: 3 }
+                ]
+            },
+            {
+                id: 19,
+                dim: "Motivación",
+                category: "Priorización Temporal",
+                question: "Si para dominar una nueva habilidad que transformará tus ingresos necesitas sacrificar 4 horas semanales de ocio, televisión o redes sociales durante dos meses, ¿cómo te posicionas?",
+                options: [
+                    { text: "Me resulta difícil de cumplir; el tiempo de ocio tras el trabajo es innegociable para poder descansar de la rutina.", score: 1 },
+                    { text: "Puedo intentarlo y recortar un poco de aquí y de allá, aunque algunos fines de semana me saltaré el plan de estudio.", score: 2 },
+                    { text: "Lo hago sin dudarlo; entiendo perfectamente la diferencia entre entretenimiento pasivo e inversión en mi propia infraestructura profesional.", score: 3 }
+                ]
+            },
+            {
+                id: 20,
+                dim: "Motivación",
+                category: "Visión de Futuro",
+                question: "¿Qué impacto real esperas que tenga en tu vida el adquirir una nueva competencia profesional de alta demanda en este momento?",
+                options: [
+                    { text: "Me gustaría ganar un extra a final de mes para estar más holgado, sin cambiar drásticamente lo que ya hago hoy en día.", score: 1 },
+                    { text: "Quiero dar un giro a mi carrera, trabajar con más autonomía y mejorar mis condiciones laborales actuales a medio plazo.", score: 2 },
+                    { text: "Busco un cambio radical: quiero dominar un ecosistema de primer nivel que me permita fundar mi propio sistema de consultoría y ser dueño absoluto de mi tiempo.", score: 3 }
+                ]
             }
-            currentTab = tabId;
+        ];
+
+        let currentQuestionIndex = 0;
+        let answers = [];
+
+        function startQuiz() {
+            document.getElementById('step-landing').classList.add('hidden');
+            document.getElementById('step-quiz').classList.remove('hidden');
+            renderQuestion();
         }
 
-        // Actualizar el valor visual de los sliders
-        function updateVal(sliderId, labelId, suffix) {
-            let val = document.getElementById(sliderId).value;
-            document.getElementById(labelId).innerText = val + suffix;
-        }
-
-        // Motor Algorítmico de Cálculos
-        function calculateAudit() {
-            // Extracción de datos del cliente
-            const name = document.getElementById('biz-name').value || 'Tu Empresa';
-            const sector = document.getElementById('biz-sector').value;
-            const mo = parseFloat(document.getElementById('hourly-rate').value);
-            const tm = parseFloat(document.getElementById('ticket').value);
-            const adminHours = parseFloat(document.getElementById('admin-hours').value);
-            const missedCalls = parseFloat(document.getElementById('missed-calls').value);
-
-            // Criterios de Selección de Radio Buttons
-            const sysAgenda = parseInt(document.querySelector('input[name="sys-agenda"]:checked').value);
-            const sysFact = parseInt(document.querySelector('input[name="sys-fact"]:checked').value);
-            const sysFollow = parseInt(document.querySelector('input[name="sys-follow"]:checked').value);
-
-            // Puntuación de madurez digital (Sobre 100)
-            const sumScore = (sysAgenda * 10) + (sysFact * 10) + (sysFollow * 10);
-            const scorePercent = Math.min(Math.round((sumScore / 30) * 100), 100);
-
-            // Clasificación de Perfil
-            let perfil = '';
-            let bgClass = '';
-            let textClass = '';
-            let setupCost = 0;
-            let maintCost = 0;
-            let toolsList = [];
-
-            if (scorePercent < 45) {
-                perfil = 'BAJO - GESTIÓN ANALÓGICA ("La Libreta")';
-                bgClass = 'bg-rose-500/10 border-rose-500/20 border text-rose-700';
-                setupCost = 1200;
-                maintCost = 90;
-                toolsList = [
-                    { name: 'Google Workspace Starter (Calendar/Drive)', cost: '5.75€ / mes', duration: 'Seguridad de agenda' },
-                    { name: 'WhatsApp Business API con Proveedor Local', cost: '15€ - 30€ / mes', duration: 'Canal de entrada estable' },
-                    { name: 'Asistente IA Base para WhatsApp de Clientes', cost: '15€ / mes en APIs', duration: 'Atención automática instantánea' }
-                ];
-            } else if (scorePercent >= 45 && scorePercent < 75) {
-                perfil = 'MEDIO - DIGITALIZACIÓN FRAGMENTADA';
-                bgClass = 'bg-amber-500/10 border-amber-500/20 border text-amber-700';
-                setupCost = 2200;
-                maintCost = 150;
-                toolsList = [
-                    { name: 'Software de Gestión SAT / Clínicas Integrado', cost: '40€ - 75€ / mes', duration: 'Centralización de fichas' },
-                    { name: 'Integrador n8n (Instalación Servidor VPS)', cost: '10€ / mes en Servidor', duration: 'Eliminación del copiar y pegar' },
-                    { name: 'Notificaciones SMS/WhatsApp automáticas', cost: 'Consumo por uso', duration: 'Envío de facturas automático' }
-                ];
-            } else {
-                perfil = 'ALTO - AVANZADO SIN INTELIGENCIA ARTIFICIAL';
-                bgClass = 'bg-emerald-500/10 border-emerald-500/20 border text-emerald-700';
-                setupCost = 4500;
-                maintCost = 250;
-                toolsList = [
-                    { name: 'GoHighLevel CRM (Estructura de Ventas)', cost: '97€ / mes', duration: 'Pipeline y seguimiento automático' },
-                    { name: 'Agente de Voz Telefónico Avanzado (Vapi AI)', cost: '0.12€ / min de llamada', duration: 'Respuesta 24/7 sin saturar' },
-                    { name: 'Modelos Multi-Agente en n8n', cost: 'Servidor Propio', duration: 'Toma de decisiones compleja' }
-                ];
-            }
-
-            // Fórmulas Financieras
-            // 1. Fuga llamadas: 35% de las llamadas se vuelven servicios
-            const fugaLlamadas = Math.round((missedCalls * 0.35) * tm * 20); 
-            // 2. Fuga admin: Horas en oficina calculadas a precio hora
-            const fugaAdmin = Math.round((adminHours * 4.3) * mo);
-            // 3. Fuga seguimiento: 20% de las citas estimadas no cerradas
-            const presupuestosMes = Math.round((missedCalls * 0.5) * 20); 
-            const fugaFollow = Math.round((presupuestosMes * 0.20) * 120); 
-
-            const fugaMensual = fugaLlamadas + fugaAdmin + fugaFollow;
-            const fugaAnual = fugaMensual * 12;
-
-            // Retorno de Inversión (ROI)
-            const tiempoAhorradoMes = Math.round(adminHours * 4.3 * 0.85); // 85% de ahorro en admin
-            const dineroAhorradoMes = Math.round((fugaLlamadas * 0.85) + (fugaAdmin * 0.85) + (fugaFollow * 0.5));
-            const amortizacionDias = Math.round((setupCost / dineroAhorradoMes) * 30);
-
-            // Almacenar datos en estado global
-            diagnosticData = {
-                name, sector, perfil, bgClass, textClass,
-                fugaLlamadas, fugaAdmin, fugaFollow, fugaMensual, fugaAnual,
-                setupCost, maintCost, toolsList,
-                tiempoAhorradoMes, dineroAhorradoMes, amortizacionDias,
-                adminHours, missedCalls
-            };
-
-            // Renderizar la visualización en la interfaz
-            document.getElementById('rad-biz-name').innerText = name;
+        function renderQuestion() {
+            const container = document.getElementById('quiz-container');
+            const currentQ = quizQuestions[currentQuestionIndex];
             
-            const badgeContainer = document.getElementById('perfil-badge-container');
-            badgeContainer.className = `p-4 rounded-xl flex flex-col gap-1 text-center ${bgClass}`;
-            document.getElementById('txt-perfil').innerText = perfil;
+            // Actualizar interfaz e indicadores de progreso
+            const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('question-counter').innerText = `Pregunta ${currentQuestionIndex + 1} de ${quizQuestions.length}`;
+            
+            // Iconos e indicadores por dimensión
+            let dimColor = "text-brand-blue bg-brand-blue/10 border-brand-blue/20";
+            if(currentQ.dim === "Cognitiva") dimColor = "text-indigo-400 bg-indigo-500/10 border-indigo-500/15";
+            if(currentQ.dim === "Psicología Operativa") dimColor = "text-emerald-400 bg-brand-emerald/10 border-brand-emerald/15";
+            if(currentQ.dim === "Motivación") dimColor = "text-purple-400 bg-purple-500/10 border-purple-500/15";
 
-            document.getElementById('txt-fuga-mensual').innerText = fugaMensual.toLocaleString() + ' €';
-            document.getElementById('txt-fuga-anual').innerText = fugaAnual.toLocaleString() + ' €';
+            document.getElementById('question-category').className = `px-2.5 py-1 rounded-full border flex items-center gap-1.5 ${dimColor}`;
+            document.getElementById('question-category').innerHTML = `
+                <span class="font-bold uppercase tracking-wider text-[10px]">${currentQ.dim}: ${currentQ.category}</span>
+            `;
 
-            document.getElementById('val-fuga-llamadas').innerText = fugaLlamadas.toLocaleString() + ' €/mes';
-            document.getElementById('val-fuga-admin').innerText = fugaAdmin.toLocaleString() + ' €/mes';
-            document.getElementById('val-fuga-follow').innerText = fugaFollow.toLocaleString() + ' €/mes';
-
-            // Actualizar Tabla ROI en Pestaña 3
-            document.getElementById('table-admin-current').innerText = Math.round(adminHours * 4.3) + ' h/mes';
-            document.getElementById('table-admin-optim').innerText = Math.round(adminHours * 4.3 * 0.15) + ' h/mes';
-            document.getElementById('table-admin-save').innerText = Math.round(fugaAdmin * 0.85) + ' €/mes';
-
-            document.getElementById('table-calls-current').innerText = missedCalls + ' al día';
-            document.getElementById('table-calls-optim').innerText = '0 (Filtrado por IA)';
-            document.getElementById('table-calls-save').innerText = Math.round(fugaLlamadas * 0.85) + ' €/mes';
-
-            document.getElementById('table-presup-current').innerText = 'Sin Seguimiento';
-            document.getElementById('table-presup-optim').innerText = '100% Automatizado';
-            document.getElementById('table-presup-save').innerText = Math.round(fugaFollow * 0.5) + ' €/mes';
-
-            // Actualizar Presupuestos y Plazos
-            document.getElementById('lbl-setup').innerText = setupCost.toLocaleString() + ' €';
-            document.getElementById('lbl-maint').innerText = maintCost + ' €/mes';
-            document.getElementById('lbl-amort').innerText = amortizacionDias + ' días';
-
-            // Rellenar lista de herramientas propuestas
-            const listContainer = document.getElementById('container-tools-list');
-            listContainer.innerHTML = '';
-            toolsList.forEach(tool => {
-                listContainer.innerHTML += `
-                    <div class="flex items-start gap-3 p-3 bg-slate-50 border border-slate-100 rounded-xl">
-                        <div class="bg-primary text-dark font-black text-xs p-1 px-2 rounded-lg mt-0.5">✓</div>
-                        <div>
-                            <span class="block text-xs font-bold text-dark">${tool.name}</span>
-                            <div class="flex gap-2 text-[10px] text-slate-500 mt-1">
-                                <span class="bg-slate-200 px-1.5 py-0.5 rounded font-mono">Coste: ${tool.cost}</span>
-                                <span class="bg-slate-200 px-1.5 py-0.5 rounded">Impacto: ${tool.duration}</span>
-                            </div>
-                        </div>
+            // Inyectar contenido de la pregunta
+            container.innerHTML = `
+                <div class="space-y-6 animate-fade-in">
+                    <h2 class="text-lg md:text-xl font-bold text-white leading-snug">${currentQ.question}</h2>
+                    <div class="space-y-3 pt-2">
+                        ${currentQ.options.map((option, idx) => `
+                            <button onclick="handleAnswer('${currentQ.dim}', ${option.score})" class="w-full text-left p-4 rounded-xl border border-slate-800 bg-slate-900/20 hover:bg-slate-850 hover:border-brand-blue/50 transition duration-200 group flex items-start gap-3">
+                                <span class="h-6 w-6 rounded-full border border-slate-700 bg-slate-950 flex items-center justify-center text-[11px] font-bold text-slate-400 group-hover:border-brand-blue group-hover:text-white shrink-0 mt-0.5">
+                                    ${String.fromCharCode(65 + idx)}
+                                </span>
+                                <span class="text-sm font-medium text-slate-300 group-hover:text-white transition-colors leading-relaxed">${option.text}</span>
+                            </button>
+                        `).join('')}
                     </div>
-                `;
-            });
+                </div>
+            `;
+        }
 
-            // Forzar el cambio de pestaña a la de diagnóstico si estamos procesando desde la primera
-            if (currentTab === 'audit') {
-                switchTab('radiography');
+        function handleAnswer(dim, score) {
+            answers.push({
+                dim: dim,
+                score: score
+            });
+            
+            if (currentQuestionIndex < quizQuestions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                showLoading();
             }
         }
 
-        // Renderizar gráfica en canvas con Chart.js
-        function renderChart() {
-            if (!diagnosticData) return;
+        function showLoading() {
+            document.getElementById('step-quiz').classList.add('hidden');
+            document.getElementById('step-loading').classList.remove('hidden');
 
-            const ctx = document.getElementById('fugasChart').getContext('2d');
-            
-            if (fugasChart) {
-                fugasChart.destroy();
-            }
+            const phrases = [
+                { title: "Evaluando perfil cognitivo...", subtitle: "Mapeando lógica secuencial y resiliencia del consultor." },
+                { title: "Analizando perfil financiero...", subtitle: "Calculando coste de oportunidad y presupuesto de inversión." },
+                { title: "Midiendo grado de motivación...", subtitle: "Validando persistencia y consistencia de compromiso." },
+                { title: "Estableciendo brecha con LUCVEX...", subtitle: "Calculando el gap técnico contra el perfil ideal certificado." }
+            ];
 
-            fugasChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Llamadas no rescatadas', 'Tiempo de Oficina perdido', 'Seguimiento de presupuestos'],
-                    datasets: [{
-                        data: [diagnosticData.fugaLlamadas, diagnosticData.fugaAdmin, diagnosticData.fugaFollow],
-                        backgroundColor: ['#ef4444', '#f59e0b', '#6366f1'],
-                        borderWidth: 2,
-                        borderColor: '#ffffff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                font: {
-                                    size: 11,
-                                    family: 'system-ui'
-                                },
-                                boxWidth: 12
-                            }
-                        }
-                    }
+            let index = 0;
+            const interval = setInterval(() => {
+                if (index < phrases.length) {
+                    document.getElementById('loading-title').innerText = phrases[index].title;
+                    index++;
                 }
-            });
-        }
-
-        // Simulación de interacción de Inteligencia Artificial (WhatsApp)
-        function sendSimulatedMessage() {
-            const input = document.getElementById('sim-input');
-            const message = input.value.trim();
-            if (!message) return;
-
-            const chatBox = document.getElementById('chat-box');
-            
-            // Vaciar texto inicial si es el primer mensaje
-            if (chatBox.innerHTML.includes('[El chat está vacío.')) {
-                chatBox.innerHTML = '';
-            }
-
-            // Mensaje del usuario simulado
-            chatBox.innerHTML += `<div class="text-slate-400"><strong class="text-slate-200">Cliente:</strong> ${message}</div>`;
-            input.value = '';
-
-            // Hacer scroll hacia abajo
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            // Simulación de la respuesta de la IA personalizada con la regla de personalización aplicada
-            setTimeout(() => {
-                let response = "";
-                if (message.toLowerCase().includes('cita') || message.toLowerCase().includes('caldera')) {
-                    response = "Hola, claro que sí. Dispongo de un hueco para la revisión de tu equipo de calefacción mañana a las 11:00 de la mañana o el jueves a las 16:00. ¿Cuál te viene mejor?";
-                } else {
-                    response = "Hola, comprendo tu consulta sobre el estado del servicio. Un técnico especializado de nuestro equipo lo revisará a la brevedad.";
-                }
-
-                // Aplicar de manera estricta la personalización solicitada en el perfil del usuario: 
-                // Añadir "por favor y gracias" al final de los mensajes simulados de WhatsApp
-                response += " Por favor y gracias.";
-
-                chatBox.innerHTML += `<div class="text-primary"><strong class="text-emerald-400">Asistente IA:</strong> ${response}</div>`;
-                chatBox.scrollTop = chatBox.scrollHeight;
             }, 1000);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                showResults();
+            }, 4200);
+        }
+
+        function showResults() {
+            document.getElementById('step-loading').classList.add('hidden');
+            document.getElementById('step-results').classList.remove('hidden');
+
+            // Clasificación de dimensiones
+            let econScore = 0;
+            let cognScore = 0;
+            let psycScore = 0;
+            let motiScore = 0;
+
+            answers.forEach(ans => {
+                if(ans.dim === "Económica") econScore += ans.score;
+                if(ans.dim === "Cognitiva") cognScore += ans.score;
+                if(ans.dim === "Psicología Operativa") psycScore += ans.score;
+                if(ans.dim === "Motivación") motiScore += ans.score;
+            });
+
+            const totalScore = econScore + cognScore + psycScore + motiScore;
+
+            // Renderizado de datos del gráfico
+            document.getElementById('total-score-display').innerText = totalScore.toString().padStart(2, '0');
+            
+            // Textos de puntaje por dimensión
+            document.getElementById('economic-score-text').innerText = `${econScore} / 15`;
+            document.getElementById('cognitive-score-text').innerText = `${cognScore} / 15`;
+            document.getElementById('psychology-score-text').innerText = `${psycScore} / 15`;
+            document.getElementById('motivation-score-text').innerText = `${motiScore} / 15`;
+
+            // Escala a porcentaje para las barras (15 puntos = 100%)
+            document.getElementById('bar-economic-user').style.width = `${(econScore / 15) * 100}%`;
+            document.getElementById('bar-cognitive-user').style.width = `${(cognScore / 15) * 100}%`;
+            document.getElementById('bar-psychology-user').style.width = `${(psycScore / 15) * 100}%`;
+            document.getElementById('bar-motivation-user').style.width = `${(motiScore / 15) * 100}%`;
+
+            let badge = document.getElementById('badge-classification');
+            let interpretation = document.getElementById('gap-interpretation-text');
+
+            // Lógica persuasiva basada en el score (Segmentación High-Ticket)
+            if (totalScore >= 20 && totalScore <= 35) {
+                badge.innerText = "Perfil Inicial / Operativo";
+                badge.className = "block text-[11px] font-bold mt-2 px-2.5 py-1 rounded-full bg-blue-500/10 text-brand-blue border border-brand-blue/20";
+                interpretation.innerHTML = `
+                    Presentas una mentalidad enfocada en la ejecución del día a día, pero estás sufriendo de <strong class="text-white">alta saturación por tareas manuales</strong> que no te dejan crecer profesionalmente. Tu perfil de salida requiere una nivelación de infraestructura técnica básica y un empuje de consistencia. 
+                    <br><br>
+                    La certificación académica de <strong class="text-white">LUCVEX</strong> es el vehículo ideal para transformar tu mentalidad hacia la sistematización y prepararte de inmediato para cobrar altas tarifas solucionando estas ineficiencias para otras empresas.
+                `;
+            } else if (totalScore >= 36 && totalScore <= 50) {
+                badge.innerText = "Perfil de Transición Eficiente";
+                badge.className = "block text-[11px] font-bold mt-2 px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/15";
+                interpretation.innerHTML = `
+                    Posees una <strong class="text-white">excelente base analítica, lógica y una motivación muy sólida para el cambio profesional</strong>. Comprendes de manera intuitiva las ineficiencias de los flujos de trabajo pero te falta dominar la metodología formal para monetizar esta habilidad. Tu perfil cognitivo está preparado para asimilar arquitecturas avanzadas.
+                    <br><br>
+                    Durante la formación aprenderás a estructurar de manera comercial soluciones de alto valor como Recepción Inteligente, Integración CRM y Centros de Mando, logrando escalar tus tarifas profesionales con rapidez.
+                `;
+            } else {
+                badge.innerText = "Cliente Ideal High-Ticket";
+                badge.className = "block text-[11px] font-bold mt-2 px-2.5 py-1 rounded-full bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/25";
+                interpretation.innerHTML = `
+                    <strong class="text-white">Perfil Avanzado de Alta Compatibilidad.</strong> Cuentas con la infraestructura mental, la resiliencia y el motor de compromiso idóneo para certificarte bajo la firma de <strong class="text-white">LUCVEX</strong>. Tu coste de oportunidad temporal indica que requieres aceleración técnica por encima de formación teórica genérica.
+                    <br><br>
+                    La certificación actuará como el acelerador para lanzar tu propia firma de consultoría y auditoría. Con este perfil, la probabilidad de cerrar proyectos de <strong class="text-brand-emerald font-semibold">2.500€ a 5.000€</strong> desde las primeras semanas es sumamente elevada.
+                `;
+            }
+
+            // Inicializar el calculador de ingresos interactivo
+            initCalculator();
+        }
+
+        function initCalculator() {
+            const sliderProj = document.getElementById('slider-projects');
+            const sliderPrice = document.getElementById('slider-price');
+            
+            const dispProj = document.getElementById('slider-projects-val');
+            const dispPrice = document.getElementById('slider-price-val');
+            const dispResult = document.getElementById('calc-result-display');
+
+            function calculate() {
+                const projVal = parseInt(sliderProj.value);
+                const priceVal = parseInt(sliderPrice.value);
+                
+                dispProj.innerText = `${projVal} ${projVal === 1 ? 'Proyecto' : 'Proyectos'}`;
+                dispPrice.innerText = `${priceVal.toLocaleString('es-ES')} €`;
+                
+                const totalIncome = projVal * priceVal;
+                dispResult.innerText = `${totalIncome.toLocaleString('es-ES')} €`;
+            }
+
+            sliderProj.addEventListener('input', calculate);
+            sliderPrice.addEventListener('input', calculate);
+            calculate();
         }
     </script>
 </body>
